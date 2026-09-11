@@ -35,7 +35,7 @@ THE SOFTWARE.
 ===============================================
 */
 
-#include "BGLib.h"
+#include "../../BGLib.h"
 
 static uint8_t isScanActive = 0;
 
