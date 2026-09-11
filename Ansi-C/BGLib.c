@@ -1,8 +1,11 @@
-// Bluegiga BGLib Arduino interface library source file
+// Bluegiga BGLib Ansi-C interface library source file
+// 2026-09-11 by Peter Bägel (DF5EQ)
 // 2014-02-12 by Jeff Rowberg <jeff@rowberg.net>
 // Updates should (hopefully) always be available at https://github.com/jrowberg/bglib
+//                                                or https://github.com/df5eq/bglib
 
 // Changelog:
+//      2026-09-11 - Change from Arduino/C++ to C
 //      2014-02-12 - Update to match SDK build 98
 //                 - Fix major issue with uint8array commands
 //      2014-01-13 - Update to match SDK build 94
@@ -12,8 +15,9 @@
 //      2012-11-14 - Initial release
 
 /* ============================================
-BGLib Arduino interface library code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+BGLib Ansi-C interface library code is placed under the MIT license
+Copyright (c) 2014 Jeff Rowberg for Arduino/C++
+Copyright (c) 2026 Peter Bägel for Ansi-C
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
