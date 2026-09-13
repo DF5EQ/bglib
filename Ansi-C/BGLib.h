@@ -42,6 +42,15 @@ THE SOFTWARE.
 #ifndef __BGLIB_H__
 #define __BGLIB_H__
 
+#ifndef BGLIB_EXTERN
+#define BGLIB_EXTERN extern
+#endif 
+
+#include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <memory.h>
 #include "BGLibConfig.h"
 
 // uncomment this line for debug output
@@ -1337,11 +1346,11 @@ void BGLib_setOutputUART(void* debug);
 uint8_t BGLib_parse(uint8_t ch, uint8_t packetMode);
 uint8_t BGLib_sendCommand(uint16_t len, uint8_t commandClass, uint8_t commandId, void* payload);
 
-void (*BGLib_onBusy)(void);              // special function to run when entering a "busy" state (e.g. mid-packet)
-void (*BGLib_onIdle)(void);              // special function to run when returning to idle mode
-void (*BGLib_onTimeout)(void);           // special function to run when the parser times out waiting for expected data
-void (*BGLib_onBeforeTXCommand)(void);   // special function to run immediately before sending a command
-void (*BGLib_onTXCommandComplete)(void); // special function to run immediately after command transmission is complete
+BGLIB_EXTERN void (*BGLib_onBusy)(void);              // special function to run when entering a "busy" state (e.g. mid-packet)
+BGLIB_EXTERN void (*BGLib_onIdle)(void);              // special function to run when returning to idle mode
+BGLIB_EXTERN void (*BGLib_onTimeout)(void);           // special function to run when the parser times out waiting for expected data
+BGLIB_EXTERN void (*BGLib_onBeforeTXCommand)(void);   // special function to run immediately before sending a command
+BGLIB_EXTERN void (*BGLib_onTXCommandComplete)(void); // special function to run immediately after command transmission is complete
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_RESET
     uint8_t BGLib_ble_cmd_system_reset(uint8 boot_in_dfu);
@@ -1724,549 +1733,520 @@ void (*BGLib_onTXCommandComplete)(void); // special function to run immediately 
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_RESET
-    void (*BGLib_ble_rsp_system_reset)(const struct ble_msg_system_reset_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_reset)(const struct ble_msg_system_reset_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_HELLO
-    void (*BGLib_ble_rsp_system_hello)(const struct ble_msg_system_hello_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_hello)(const struct ble_msg_system_hello_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ADDRESS_GET
-    void (*BGLib_ble_rsp_system_address_get)(const struct ble_msg_system_address_get_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_address_get)(const struct ble_msg_system_address_get_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_REG_WRITE
-    void (*BGLib_ble_rsp_system_reg_write)(const struct ble_msg_system_reg_write_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_reg_write)(const struct ble_msg_system_reg_write_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_REG_READ
-    void (*BGLib_ble_rsp_system_reg_read)(const struct ble_msg_system_reg_read_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_reg_read)(const struct ble_msg_system_reg_read_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_GET_COUNTERS
-    void (*BGLib_ble_rsp_system_get_counters)(const struct ble_msg_system_get_counters_rsp_t *msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_get_counters)(const struct ble_msg_system_get_counters_rsp_t *msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_GET_CONNECTIONS
-    void (*BGLib_ble_rsp_system_get_connections)(const struct ble_msg_system_get_connections_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_get_connections)(const struct ble_msg_system_get_connections_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_READ_MEMORY
-    void (*BGLib_ble_rsp_system_read_memory)(const struct ble_msg_system_read_memory_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_read_memory)(const struct ble_msg_system_read_memory_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_GET_INFO
-    void (*BGLib_ble_rsp_system_get_info)(const struct ble_msg_system_get_info_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_get_info)(const struct ble_msg_system_get_info_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_TX
-    void (*BGLib_ble_rsp_system_endpoint_tx)(const struct ble_msg_system_endpoint_tx_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_endpoint_tx)(const struct ble_msg_system_endpoint_tx_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_WHITELIST_APPEND
-    void (*BGLib_ble_rsp_system_whitelist_append)(const struct ble_msg_system_whitelist_append_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_whitelist_append)(const struct ble_msg_system_whitelist_append_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_WHITELIST_REMOVE
-    void (*BGLib_ble_rsp_system_whitelist_remove)(const struct ble_msg_system_whitelist_remove_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_whitelist_remove)(const struct ble_msg_system_whitelist_remove_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_WHITELIST_CLEAR
-    void (*BGLib_ble_rsp_system_whitelist_clear)(const struct ble_msg_system_whitelist_clear_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_whitelist_clear)(const struct ble_msg_system_whitelist_clear_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_RX
-    void (*BGLib_ble_rsp_system_endpoint_rx)(const struct ble_msg_system_endpoint_rx_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_endpoint_rx)(const struct ble_msg_system_endpoint_rx_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_SET_WATERMARKS
-    void (*BGLib_ble_rsp_system_endpoint_set_watermarks)(const struct ble_msg_system_endpoint_set_watermarks_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_endpoint_set_watermarks)(const struct ble_msg_system_endpoint_set_watermarks_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_DEFRAG
-    void (*BGLib_ble_rsp_flash_ps_defrag)(const struct ble_msg_flash_ps_defrag_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_ps_defrag)(const struct ble_msg_flash_ps_defrag_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_DUMP
-    void (*BGLib_ble_rsp_flash_ps_dump)(const struct ble_msg_flash_ps_dump_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_ps_dump)(const struct ble_msg_flash_ps_dump_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_ERASE_ALL
-    void (*BGLib_ble_rsp_flash_ps_erase_all)(const struct ble_msg_flash_ps_erase_all_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_ps_erase_all)(const struct ble_msg_flash_ps_erase_all_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_SAVE
-    void (*BGLib_ble_rsp_flash_ps_save)(const struct ble_msg_flash_ps_save_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_ps_save)(const struct ble_msg_flash_ps_save_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_LOAD
-    void (*BGLib_ble_rsp_flash_ps_load)(const struct ble_msg_flash_ps_load_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_ps_load)(const struct ble_msg_flash_ps_load_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_ERASE
-    void (*BGLib_ble_rsp_flash_ps_erase)(const struct ble_msg_flash_ps_erase_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_ps_erase)(const struct ble_msg_flash_ps_erase_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_ERASE_PAGE
-    void (*BGLib_ble_rsp_flash_erase_page)(const struct ble_msg_flash_erase_page_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_erase_page)(const struct ble_msg_flash_erase_page_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_WRITE_DATA
-    void (*BGLib_ble_rsp_flash_write_data)(const struct ble_msg_flash_write_data_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_write_data)(const struct ble_msg_flash_write_data_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_READ_DATA
-    void (*BGLib_ble_rsp_flash_read_data)(const struct ble_msg_flash_read_data_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_read_data)(const struct ble_msg_flash_read_data_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_WRITE
-    void (*BGLib_ble_rsp_attributes_write)(const struct ble_msg_attributes_write_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attributes_write)(const struct ble_msg_attributes_write_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_READ
-    void (*BGLib_ble_rsp_attributes_read)(const struct ble_msg_attributes_read_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attributes_read)(const struct ble_msg_attributes_read_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_READ_TYPE
-    void (*BGLib_ble_rsp_attributes_read_type)(const struct ble_msg_attributes_read_type_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attributes_read_type)(const struct ble_msg_attributes_read_type_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_USER_READ_RESPONSE
-    void (*BGLib_ble_rsp_attributes_user_read_response)(const struct ble_msg_attributes_user_read_response_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attributes_user_read_response)(const struct ble_msg_attributes_user_read_response_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_USER_WRITE_RESPONSE
-    void (*BGLib_ble_rsp_attributes_user_write_response)(const struct ble_msg_attributes_user_write_response_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attributes_user_write_response)(const struct ble_msg_attributes_user_write_response_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_DISCONNECT
-    void (*BGLib_ble_rsp_connection_disconnect)(const struct ble_msg_connection_disconnect_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_connection_disconnect)(const struct ble_msg_connection_disconnect_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_GET_RSSI
-    void (*BGLib_ble_rsp_connection_get_rssi)(const struct ble_msg_connection_get_rssi_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_connection_get_rssi)(const struct ble_msg_connection_get_rssi_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_UPDATE
-    void (*BGLib_ble_rsp_connection_update)(const struct ble_msg_connection_update_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_connection_update)(const struct ble_msg_connection_update_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_VERSION_UPDATE
-    void (*BGLib_ble_rsp_connection_version_update)(const struct ble_msg_connection_version_update_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_connection_version_update)(const struct ble_msg_connection_version_update_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_CHANNEL_MAP_GET
-    void (*BGLib_ble_rsp_connection_channel_map_get)(const struct ble_msg_connection_channel_map_get_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_connection_channel_map_get)(const struct ble_msg_connection_channel_map_get_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_CHANNEL_MAP_SET
-    void (*BGLib_ble_rsp_connection_channel_map_set)(const struct ble_msg_connection_channel_map_set_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_connection_channel_map_set)(const struct ble_msg_connection_channel_map_set_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_FEATURES_GET
-    void (*BGLib_ble_rsp_connection_features_get)(const struct ble_msg_connection_features_get_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_connection_features_get)(const struct ble_msg_connection_features_get_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_GET_STATUS
-    void (*BGLib_ble_rsp_connection_get_status)(const struct ble_msg_connection_get_status_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_connection_get_status)(const struct ble_msg_connection_get_status_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_RAW_TX
-    void (*BGLib_ble_rsp_connection_raw_tx)(const struct ble_msg_connection_raw_tx_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_connection_raw_tx)(const struct ble_msg_connection_raw_tx_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_FIND_BY_TYPE_VALUE
-    void (*BGLib_ble_rsp_attclient_find_by_type_value)(const struct ble_msg_attclient_find_by_type_value_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attclient_find_by_type_value)(const struct ble_msg_attclient_find_by_type_value_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_READ_BY_GROUP_TYPE
-    void (*BGLib_ble_rsp_attclient_read_by_group_type)(const struct ble_msg_attclient_read_by_group_type_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attclient_read_by_group_type)(const struct ble_msg_attclient_read_by_group_type_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_READ_BY_TYPE
-    void (*BGLib_ble_rsp_attclient_read_by_type)(const struct ble_msg_attclient_read_by_type_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attclient_read_by_type)(const struct ble_msg_attclient_read_by_type_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_FIND_INFORMATION
-    void (*BGLib_ble_rsp_attclient_find_information)(const struct ble_msg_attclient_find_information_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attclient_find_information)(const struct ble_msg_attclient_find_information_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_READ_BY_HANDLE
-    void (*BGLib_ble_rsp_attclient_read_by_handle)(const struct ble_msg_attclient_read_by_handle_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attclient_read_by_handle)(const struct ble_msg_attclient_read_by_handle_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_ATTRIBUTE_WRITE
-    void (*BGLib_ble_rsp_attclient_attribute_write)(const struct ble_msg_attclient_attribute_write_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attclient_attribute_write)(const struct ble_msg_attclient_attribute_write_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_WRITE_COMMAND
-    void (*BGLib_ble_rsp_attclient_write_command)(const struct ble_msg_attclient_write_command_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attclient_write_command)(const struct ble_msg_attclient_write_command_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_INDICATE_CONFIRM
-    void (*BGLib_ble_rsp_attclient_indicate_confirm)(const struct ble_msg_attclient_indicate_confirm_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attclient_indicate_confirm)(const struct ble_msg_attclient_indicate_confirm_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_READ_LONG
-    void (*BGLib_ble_rsp_attclient_read_long)(const struct ble_msg_attclient_read_long_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attclient_read_long)(const struct ble_msg_attclient_read_long_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_PREPARE_WRITE
-    void (*BGLib_ble_rsp_attclient_prepare_write)(const struct ble_msg_attclient_prepare_write_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attclient_prepare_write)(const struct ble_msg_attclient_prepare_write_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_EXECUTE_WRITE
-    void (*BGLib_ble_rsp_attclient_execute_write)(const struct ble_msg_attclient_execute_write_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attclient_execute_write)(const struct ble_msg_attclient_execute_write_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_READ_MULTIPLE
-    void (*BGLib_ble_rsp_attclient_read_multiple)(const struct ble_msg_attclient_read_multiple_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attclient_read_multiple)(const struct ble_msg_attclient_read_multiple_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SM_ENCRYPT_START
-    void (*BGLib_ble_rsp_sm_encrypt_start)(const struct ble_msg_sm_encrypt_start_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_sm_encrypt_start)(const struct ble_msg_sm_encrypt_start_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SM_SET_BONDABLE_MODE
-    void (*BGLib_ble_rsp_sm_set_bondable_mode)(const struct ble_msg_sm_set_bondable_mode_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_sm_set_bondable_mode)(const struct ble_msg_sm_set_bondable_mode_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SM_DELETE_BONDING
-    void (*BGLib_ble_rsp_sm_delete_bonding)(const struct ble_msg_sm_delete_bonding_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_sm_delete_bonding)(const struct ble_msg_sm_delete_bonding_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SM_SET_PARAMETERS
-    void (*BGLib_ble_rsp_sm_set_parameters)(const struct ble_msg_sm_set_parameters_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_sm_set_parameters)(const struct ble_msg_sm_set_parameters_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SM_PASSKEY_ENTRY
-    void (*BGLib_ble_rsp_sm_passkey_entry)(const struct ble_msg_sm_passkey_entry_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_sm_passkey_entry)(const struct ble_msg_sm_passkey_entry_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SM_GET_BONDS
-    void (*BGLib_ble_rsp_sm_get_bonds)(const struct ble_msg_sm_get_bonds_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_sm_get_bonds)(const struct ble_msg_sm_get_bonds_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SM_SET_OOB_DATA
-    void (*BGLib_ble_rsp_sm_set_oob_data)(const struct ble_msg_sm_set_oob_data_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_sm_set_oob_data)(const struct ble_msg_sm_set_oob_data_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_PRIVACY_FLAGS
-    void (*BGLib_ble_rsp_gap_set_privacy_flags)(const struct ble_msg_gap_set_privacy_flags_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_gap_set_privacy_flags)(const struct ble_msg_gap_set_privacy_flags_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_MODE
-    void (*BGLib_ble_rsp_gap_set_mode)(const struct ble_msg_gap_set_mode_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_gap_set_mode)(const struct ble_msg_gap_set_mode_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_GAP_DISCOVER
-    void (*BGLib_ble_rsp_gap_discover)(const struct ble_msg_gap_discover_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_gap_discover)(const struct ble_msg_gap_discover_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_GAP_CONNECT_DIRECT
-    void (*BGLib_ble_rsp_gap_connect_direct)(const struct ble_msg_gap_connect_direct_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_gap_connect_direct)(const struct ble_msg_gap_connect_direct_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_GAP_END_PROCEDURE
-    void (*BGLib_ble_rsp_gap_end_procedure)(const struct ble_msg_gap_end_procedure_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_gap_end_procedure)(const struct ble_msg_gap_end_procedure_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_GAP_CONNECT_SELECTIVE
-    void (*BGLib_ble_rsp_gap_connect_selective)(const struct ble_msg_gap_connect_selective_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_gap_connect_selective)(const struct ble_msg_gap_connect_selective_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_FILTERING
-    void (*BGLib_ble_rsp_gap_set_filtering)(const struct ble_msg_gap_set_filtering_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_gap_set_filtering)(const struct ble_msg_gap_set_filtering_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_SCAN_PARAMETERS
-    void (*BGLib_ble_rsp_gap_set_scan_parameters)(const struct ble_msg_gap_set_scan_parameters_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_gap_set_scan_parameters)(const struct ble_msg_gap_set_scan_parameters_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_ADV_PARAMETERS
-    void (*BGLib_ble_rsp_gap_set_adv_parameters)(const struct ble_msg_gap_set_adv_parameters_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_gap_set_adv_parameters)(const struct ble_msg_gap_set_adv_parameters_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_ADV_DATA
-    void (*BGLib_ble_rsp_gap_set_adv_data)(const struct ble_msg_gap_set_adv_data_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_gap_set_adv_data)(const struct ble_msg_gap_set_adv_data_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_DIRECTED_CONNECTABLE_MODE
-    void (*BGLib_ble_rsp_gap_set_directed_connectable_mode)(const struct ble_msg_gap_set_directed_connectable_mode_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_gap_set_directed_connectable_mode)(const struct ble_msg_gap_set_directed_connectable_mode_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_CONFIG_IRQ
-    void (*BGLib_ble_rsp_hardware_io_port_config_irq)(const struct ble_msg_hardware_io_port_config_irq_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_io_port_config_irq)(const struct ble_msg_hardware_io_port_config_irq_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_SET_SOFT_TIMER
-    void (*BGLib_ble_rsp_hardware_set_soft_timer)(const struct ble_msg_hardware_set_soft_timer_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_set_soft_timer)(const struct ble_msg_hardware_set_soft_timer_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_ADC_READ
-    void (*BGLib_ble_rsp_hardware_adc_read)(const struct ble_msg_hardware_adc_read_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_adc_read)(const struct ble_msg_hardware_adc_read_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_CONFIG_DIRECTION
-    void (*BGLib_ble_rsp_hardware_io_port_config_direction)(const struct ble_msg_hardware_io_port_config_direction_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_io_port_config_direction)(const struct ble_msg_hardware_io_port_config_direction_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_CONFIG_FUNCTION
-    void (*BGLib_ble_rsp_hardware_io_port_config_function)(const struct ble_msg_hardware_io_port_config_function_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_io_port_config_function)(const struct ble_msg_hardware_io_port_config_function_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_CONFIG_PULL
-    void (*BGLib_ble_rsp_hardware_io_port_config_pull)(const struct ble_msg_hardware_io_port_config_pull_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_io_port_config_pull)(const struct ble_msg_hardware_io_port_config_pull_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_WRITE
-    void (*BGLib_ble_rsp_hardware_io_port_write)(const struct ble_msg_hardware_io_port_write_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_io_port_write)(const struct ble_msg_hardware_io_port_write_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_READ
-    void (*BGLib_ble_rsp_hardware_io_port_read)(const struct ble_msg_hardware_io_port_read_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_io_port_read)(const struct ble_msg_hardware_io_port_read_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_SPI_CONFIG
-    void (*BGLib_ble_rsp_hardware_spi_config)(const struct ble_msg_hardware_spi_config_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_spi_config)(const struct ble_msg_hardware_spi_config_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_SPI_TRANSFER
-    void (*BGLib_ble_rsp_hardware_spi_transfer)(const struct ble_msg_hardware_spi_transfer_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_spi_transfer)(const struct ble_msg_hardware_spi_transfer_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_I2C_READ
-    void (*BGLib_ble_rsp_hardware_i2c_read)(const struct ble_msg_hardware_i2c_read_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_i2c_read)(const struct ble_msg_hardware_i2c_read_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_I2C_WRITE
-    void (*BGLib_ble_rsp_hardware_i2c_write)(const struct ble_msg_hardware_i2c_write_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_i2c_write)(const struct ble_msg_hardware_i2c_write_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_SET_TXPOWER
-    void (*BGLib_ble_rsp_hardware_set_txpower)(const struct ble_msg_hardware_set_txpower_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_set_txpower)(const struct ble_msg_hardware_set_txpower_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_TIMER_COMPARATOR
-    void (*BGLib_ble_rsp_hardware_timer_comparator)(const struct ble_msg_hardware_timer_comparator_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_timer_comparator)(const struct ble_msg_hardware_timer_comparator_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_IRQ_ENABLE
-    void (*BGLib_ble_rsp_hardware_io_port_irq_enable)(const struct ble_msg_hardware_io_port_irq_enaBGLib_ble_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_io_port_irq_enable)(const struct ble_msg_hardware_io_port_irq_enaBGLib_ble_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_IRQ_DIRECTION
-    void (*BGLib_ble_rsp_hardware_io_port_irq_direction)(const struct ble_msg_hardware_io_port_irq_direction_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_io_port_irq_direction)(const struct ble_msg_hardware_io_port_irq_direction_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_TX
-    void (*BGLib_ble_rsp_test_phy_tx)(const struct ble_msg_test_phy_tx_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_test_phy_tx)(const struct ble_msg_test_phy_tx_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_RX
-    void (*BGLib_ble_rsp_test_phy_rx)(const struct ble_msg_test_phy_rx_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_test_phy_rx)(const struct ble_msg_test_phy_rx_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_END
-    void (*BGLib_ble_rsp_test_phy_end)(const struct ble_msg_test_phy_end_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_test_phy_end)(const struct ble_msg_test_phy_end_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_RESET
-    void (*BGLib_ble_rsp_test_phy_reset)(const struct ble_msg_test_phy_reset_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_test_phy_reset)(const struct ble_msg_test_phy_reset_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_TEST_GET_CHANNEL_MAP
-    void (*BGLib_ble_rsp_test_get_channel_map)(const struct ble_msg_test_get_channel_map_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_test_get_channel_map)(const struct ble_msg_test_get_channel_map_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_TEST_DEBUG
-    void (*BGLib_ble_rsp_test_debug)(const struct ble_msg_test_debug_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_test_debug)(const struct ble_msg_test_debug_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_TEST_CHANNEL_MODE
-    void (*BGLib_ble_rsp_test_channel_mode)(const struct ble_msg_test_channel_mode_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_test_channel_mode)(const struct ble_msg_test_channel_mode_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_DFU_RESET
-    void (*BGLib_ble_rsp_dfu_reset)(const struct ble_msg_dfu_reset_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_dfu_reset)(const struct ble_msg_dfu_reset_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_DFU_FLASH_SET_ADDRESS
-    void (*BGLib_ble_rsp_dfu_flash_set_address)(const struct ble_msg_dfu_flash_set_address_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_dfu_flash_set_address)(const struct ble_msg_dfu_flash_set_address_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_DFU_FLASH_UPLOAD
-    void (*BGLib_ble_rsp_dfu_flash_upload)(const struct ble_msg_dfu_flash_upload_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_dfu_flash_upload)(const struct ble_msg_dfu_flash_upload_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_DFU_FLASH_UPLOAD_FINISH
-    void (*BGLib_ble_rsp_dfu_flash_upload_finish)(const struct ble_msg_dfu_flash_upload_finish_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_dfu_flash_upload_finish)(const struct ble_msg_dfu_flash_upload_finish_rsp_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_SYSTEM_BOOT
-    void (*BGLib_ble_evt_system_boot)(const struct ble_msg_system_boot_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_system_boot)(const struct ble_msg_system_boot_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_SYSTEM_DEBUG
-    void (*BGLib_ble_evt_system_debug)(const struct ble_msg_system_debug_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_system_debug)(const struct ble_msg_system_debug_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_SYSTEM_ENDPOINT_WATERMARK_RX
-    void (*BGLib_ble_evt_system_endpoint_watermark_rx)(const struct ble_msg_system_endpoint_watermark_rx_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_system_endpoint_watermark_rx)(const struct ble_msg_system_endpoint_watermark_rx_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_SYSTEM_ENDPOINT_WATERMARK_TX
-    void (*BGLib_ble_evt_system_endpoint_watermark_tx)(const struct ble_msg_system_endpoint_watermark_tx_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_system_endpoint_watermark_tx)(const struct ble_msg_system_endpoint_watermark_tx_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_SYSTEM_SCRIPT_FAILURE
-    void (*BGLib_ble_evt_system_script_failure)(const struct ble_msg_system_script_failure_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_system_script_failure)(const struct ble_msg_system_script_failure_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_SYSTEM_NO_LICENSE_KEY
-    void (*BGLib_ble_evt_system_no_license_key)(const struct ble_msg_system_no_license_key_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_system_no_license_key)(const struct ble_msg_system_no_license_key_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_SYSTEM_PROTOCOL_ERROR
-    void (*BGLib_ble_evt_system_protocol_error)(const struct ble_msg_system_protocol_error_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_system_protocol_error)(const struct ble_msg_system_protocol_error_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_FLASH_PS_KEY
-    void (*BGLib_ble_evt_flash_ps_key)(const struct ble_msg_flash_ps_key_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_flash_ps_key)(const struct ble_msg_flash_ps_key_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_ATTRIBUTES_VALUE
-    void (*BGLib_ble_evt_attributes_value)(const struct ble_msg_attributes_value_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_attributes_value)(const struct ble_msg_attributes_value_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_ATTRIBUTES_USER_READ_REQUEST
-    void (*BGLib_ble_evt_attributes_user_read_request)(const struct ble_msg_attributes_user_read_request_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_attributes_user_read_request)(const struct ble_msg_attributes_user_read_request_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_ATTRIBUTES_STATUS
-    void (*BGLib_ble_evt_attributes_status)(const struct ble_msg_attributes_status_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_attributes_status)(const struct ble_msg_attributes_status_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_CONNECTION_STATUS
-    void (*BGLib_ble_evt_connection_status)(const struct ble_msg_connection_status_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_connection_status)(const struct ble_msg_connection_status_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_CONNECTION_VERSION_IND
-    void (*BGLib_ble_evt_connection_version_ind)(const struct ble_msg_connection_version_ind_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_connection_version_ind)(const struct ble_msg_connection_version_ind_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_CONNECTION_FEATURE_IND
-    void (*BGLib_ble_evt_connection_feature_ind)(const struct ble_msg_connection_feature_ind_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_connection_feature_ind)(const struct ble_msg_connection_feature_ind_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_CONNECTION_RAW_RX
-    void (*BGLib_ble_evt_connection_raw_rx)(const struct ble_msg_connection_raw_rx_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_connection_raw_rx)(const struct ble_msg_connection_raw_rx_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_CONNECTION_DISCONNECTED
-    void (*BGLib_ble_evt_connection_disconnected)(const struct ble_msg_connection_disconnected_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_connection_disconnected)(const struct ble_msg_connection_disconnected_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_ATTCLIENT_INDICATED
-    void (*BGLib_ble_evt_attclient_indicated)(const struct ble_msg_attclient_indicated_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_attclient_indicated)(const struct ble_msg_attclient_indicated_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_ATTCLIENT_PROCEDURE_COMPLETED
-    void (*BGLib_ble_evt_attclient_procedure_completed)(const struct ble_msg_attclient_procedure_completed_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_attclient_procedure_completed)(const struct ble_msg_attclient_procedure_completed_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_ATTCLIENT_GROUP_FOUND
-    void (*BGLib_ble_evt_attclient_group_found)(const struct ble_msg_attclient_group_found_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_attclient_group_found)(const struct ble_msg_attclient_group_found_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_ATTCLIENT_ATTRIBUTE_FOUND
-    void (*BGLib_ble_evt_attclient_attribute_found)(const struct ble_msg_attclient_attribute_found_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_attclient_attribute_found)(const struct ble_msg_attclient_attribute_found_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_ATTCLIENT_FIND_INFORMATION_FOUND
-    void (*BGLib_ble_evt_attclient_find_information_found)(const struct ble_msg_attclient_find_information_found_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_attclient_find_information_found)(const struct ble_msg_attclient_find_information_found_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_ATTCLIENT_ATTRIBUTE_VALUE
-    void (*BGLib_ble_evt_attclient_attribute_value)(const struct ble_msg_attclient_attribute_value_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_attclient_attribute_value)(const struct ble_msg_attclient_attribute_value_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_ATTCLIENT_READ_MULTIPLE_RESPONSE
-    void (*BGLib_ble_evt_attclient_read_multiple_response)(const struct ble_msg_attclient_read_multiple_response_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_attclient_read_multiple_response)(const struct ble_msg_attclient_read_multiple_response_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_SM_SMP_DATA
-    void (*BGLib_ble_evt_sm_smp_data)(const struct ble_msg_sm_smp_data_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_sm_smp_data)(const struct ble_msg_sm_smp_data_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_SM_BONDING_FAIL
-    void (*BGLib_ble_evt_sm_bonding_fail)(const struct ble_msg_sm_bonding_fail_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_sm_bonding_fail)(const struct ble_msg_sm_bonding_fail_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_SM_PASSKEY_DISPLAY
-    void (*BGLib_ble_evt_sm_passkey_display)(const struct ble_msg_sm_passkey_display_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_sm_passkey_display)(const struct ble_msg_sm_passkey_display_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_SM_PASSKEY_REQUEST
-    void (*BGLib_ble_evt_sm_passkey_request)(const struct ble_msg_sm_passkey_request_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_sm_passkey_request)(const struct ble_msg_sm_passkey_request_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_SM_BOND_STATUS
-    void (*BGLib_ble_evt_sm_bond_status)(const struct ble_msg_sm_bond_status_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_sm_bond_status)(const struct ble_msg_sm_bond_status_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_GAP_SCAN_RESPONSE
-    void (*BGLib_ble_evt_gap_scan_response)(const struct ble_msg_gap_scan_response_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_gap_scan_response)(const struct ble_msg_gap_scan_response_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_GAP_MODE_CHANGED
-    void (*BGLib_ble_evt_gap_mode_changed)(const struct ble_msg_gap_mode_changed_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_gap_mode_changed)(const struct ble_msg_gap_mode_changed_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_HARDWARE_IO_PORT_STATUS
-    void (*BGLib_ble_evt_hardware_io_port_status)(const struct ble_msg_hardware_io_port_status_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_hardware_io_port_status)(const struct ble_msg_hardware_io_port_status_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_HARDWARE_SOFT_TIMER
-    void (*BGLib_ble_evt_hardware_soft_timer)(const struct ble_msg_hardware_soft_timer_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_hardware_soft_timer)(const struct ble_msg_hardware_soft_timer_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_HARDWARE_ADC_RESULT
-    void (*BGLib_ble_evt_hardware_adc_result)(const struct ble_msg_hardware_adc_result_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_hardware_adc_result)(const struct ble_msg_hardware_adc_result_evt_t* msg);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_DFU_BOOT
-    void (*BGLib_ble_evt_dfu_boot)(const struct ble_msg_dfu_boot_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_dfu_boot)(const struct ble_msg_dfu_boot_evt_t* msg);
 #endif
 
-/*----- private -------------------------------------------------------------*/
+#endif // __BGLIB_H_
 
-// incoming packet buffer vars
-uint8_t* bgapiRXBuffer;
-uint8_t  bgapiRXBufferSize;
-uint8_t  bgapiRXBufferPos;
-uint16_t bgapiRXDataLen;
-
-// outgoing package buffer vars
-uint8_t* bgapiTXBuffer;
-uint8_t  bgapiTXBufferSize;
-uint8_t  bgapiTXBufferPos;
-
-// BGAPI packet structure representation
-const struct ble_msg* packetMessage;
-struct ble_header packetHeader;
-uint8_t* packetData;
-
-void* uModule; // required UART object with module connection
-void* uOutput; // optional UART object for host/debug connection
-
-bool     busy;
-uint8_t  packetMode;
-uint8_t  lastCommand[2];
-uint8_t  lastResponse[2];
-uint8_t  lastEvent[2];
-uint32_t timeoutStart;
-bool     lastError;
-bool     lastTimeout;
-
-#endif

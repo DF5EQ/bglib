@@ -35,9 +35,101 @@ THE SOFTWARE.
 ===============================================
 */
 
-#include "../../BGLib.h"
+#include "BGLib.h"
 
 static uint8_t isScanActive = 0;
+
+// ================================================================
+// INTERNAL BGLIB CALLBACK FUNCTIONS
+// ================================================================
+
+void onBusy() {
+    printf("busy\n");
+}
+
+void onIdle() {
+    printf("idle\n");
+}
+
+void onTimeout() {
+    printf("!!!\tTimeout occurred!\n");
+}
+
+void onBeforeTXCommand() {
+    printf("TX started\n");
+    // wait for "hardware_io_port_status" event to come through, and parse it (and otherwise ignore it)
+    uint8_t* last;
+    while (1) {
+        BGLib_checkActivity(0);
+        last = BGLib_getLastEvent();
+        if (last[0] == 0x07 && last[1] == 0x00) break;
+    }
+    
+    // give a bit of a gap between parsing the wake-up event and allowing the command to go out
+    sleep(1);
+}
+
+void onTXCommandComplete() {
+    printf("TX complete\n");
+}
+
+// ================================================================
+// USER-DEFINED BGLIB RESPONSE CALLBACKS
+// ================================================================
+
+void my_rsp_system_hello(const struct ble_msg_system_hello_rsp_t* msg) {
+    printf("<--\tsystem_hello\n");
+}
+
+void my_rsp_gap_set_scan_parameters(const struct ble_msg_gap_set_scan_parameters_rsp_t* msg) {
+    printf("<--\tgap_set_scan_parameters: { result: %x }\n", msg->result);
+}
+
+void my_rsp_gap_discover(const struct ble_msg_gap_discover_rsp_t* msg) {
+    printf("<--\tgap_discover: { result: %x }\n", msg->result);
+}
+
+void my_rsp_gap_end_procedure(const struct ble_msg_gap_end_procedure_rsp_t* msg) {
+    printf("<--\tgap_end_procedure: { result: %x }\n", msg->result);
+}
+
+// ================================================================
+// USER-DEFINED BGLIB EVENT CALLBACKS
+// ================================================================
+
+void my_evt_system_boot(const struct ble_msg_system_boot_evt_t* msg) {
+    printf("###\tsystem_boot: { ");
+    printf("major: %x", msg->major);
+    printf(", minor: %x", msg->minor);
+    printf(", patch: %x", msg->patch);
+    printf(", build: %x", msg->build);
+    printf(", ll_version: %x", msg->ll_version);
+    printf(", protocol_version: %x", msg->protocol_version);
+    printf(", hw: %x", msg->hw);
+    printf(" }\n");
+}
+
+void my_evt_gap_scan_response(const struct ble_msg_gap_scan_response_evt_t* msg) {
+    printf("###\tgap_scan_response: { ");
+    printf("rssi: %d", msg-> rssi);
+    printf(", packet_type: %x", msg->packet_type);
+    printf(", sender: ");
+    // this is a "bd_addr" data type, which is a 6-byte uint8_t array
+    for (uint8_t i = 0; i < 6; i++) {
+        printf("%02x ", msg->sender.addr[i]);
+    }
+    printf(", address_type: %x", msg->address_type);
+    printf(", bond: %x", msg->bond);
+    printf(", data: ");
+    // this is a "uint8array" data type, which is a length byte and a uint8_t* pointer
+    for (uint8_t i = 0; i < msg->data.len; i++) {
+        printf("%02x ", msg->data.data[i]);
+    }
+    printf(" }");
+}
+
+
+/*========== main ===========================================================*/
 
 main(void) {
     BGLib_init(0,0,1);
@@ -73,7 +165,7 @@ main(void) {
 
     while (1) {
         // keep polling for new data from BLE
-        BGLib_checkActivity();
+        BGLib_checkActivity(0);
 
         // check for input from the user
         if (/*TODO Serial.available()*/1) {
@@ -118,94 +210,5 @@ main(void) {
             }
         }
     }
-}
-
-// ================================================================
-// INTERNAL BGLIB CALLBACK FUNCTIONS
-// ================================================================
-
-void onBusy() {
-    printf("busy\n");
-}
-
-void onIdle() {
-    printf("idle\n");
-}
-
-void onTimeout() {
-    printf("!!!\tTimeout occurred!\n");
-}
-
-void onBeforeTXCommand() {
-    printf("TX started\n");
-    // wait for "hardware_io_port_status" event to come through, and parse it (and otherwise ignore it)
-    uint8_t* last;
-    while (1) {
-        BGLib_checkActivity();
-        last = BGLib_getLastEvent();
-        if (last[0] == 0x07 && last[1] == 0x00) break;
-    }
-    
-    // give a bit of a gap between parsing the wake-up event and allowing the command to go out
-    sleep(1);
-}
-
-void onTXCommandComplete() {
-    printf("TX complete\n");
-}
-
-// ================================================================
-// USER-DEFINED BGLIB RESPONSE CALLBACKS
-// ================================================================
-
-void my_rsp_system_hello(const ble_msg_system_hello_rsp_t* msg) {
-    printf("<--\tsystem_hello\n");
-}
-
-void my_rsp_gap_set_scan_parameters(const ble_msg_gap_set_scan_parameters_rsp_t* msg) {
-    printf("<--\tgap_set_scan_parameters: { result: %x }\n", msg->result);
-}
-
-void my_rsp_gap_discover(const ble_msg_gap_discover_rsp_t* msg) {
-    printf("<--\tgap_discover: { result: %x }\n", msg->result);
-}
-
-void my_rsp_gap_end_procedure(const ble_msg_gap_end_procedure_rsp_t* msg) {
-    printf("<--\tgap_end_procedure: { result: %x }\n", msg->result);
-}
-
-// ================================================================
-// USER-DEFINED BGLIB EVENT CALLBACKS
-// ================================================================
-
-void my_evt_system_boot(const ble_msg_system_boot_evt_t* msg) {
-    printf("###\tsystem_boot: { "
-    printf("major: %x", msg->major);
-    printf(", minor: %x", msg->minor);
-    printf(", patch: %x", msg->patch);
-    printf(", build: %x", msg->build);
-    printf(", ll_version: %x", msg->ll_version);
-    printf(", protocol_version: %x", msg->protocol_version);
-    printf(", hw: %x", msg->hw);
-    printf(" }\n");
-}
-
-void my_evt_gap_scan_response(const ble_msg_gap_scan_response_evt_t *msg) {
-    printf("###\tgap_scan_response: { ");
-    printf("rssi: %d", msg-> rssi);
-    printf(", packet_type: %x", msg->packet_type);
-    printf(", sender: ");
-    // this is a "bd_addr" data type, which is a 6-byte uint8_t array
-    for (uint8_t i = 0; i < 6; i++) {
-        printf("%02x ", msg->sender.addr[i]);
-    }
-    printf(", address_type: %x", msg->address_type);
-    printf(", bond: %x", msg->bond);
-    printf(", data: ");
-    // this is a "uint8array" data type, which is a length byte and a uint8_t* pointer
-    for (uint8_t i = 0; i < msg->data.len; i++) {
-        printf("%02x ", msg->data.data[i]);
-    }
-    printf(" }");
 }
 
