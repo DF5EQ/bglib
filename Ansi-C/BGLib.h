@@ -1733,11 +1733,11 @@ BGLIB_EXTERN void (*BGLib_onTXCommandComplete)(void); // special function to run
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_RESET
-    BGLIB_EXTERN void (*BGLib_ble_rsp_system_reset)(const struct ble_msg_system_reset_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_reset)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_HELLO
-    BGLIB_EXTERN void (*BGLib_ble_rsp_system_hello)(const struct ble_msg_system_hello_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_hello)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ADDRESS_GET
@@ -1781,7 +1781,7 @@ BGLIB_EXTERN void (*BGLib_onTXCommandComplete)(void); // special function to run
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_WHITELIST_CLEAR
-    BGLIB_EXTERN void (*BGLib_ble_rsp_system_whitelist_clear)(const struct ble_msg_system_whitelist_clear_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_system_whitelist_clear)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_RX
@@ -1793,15 +1793,15 @@ BGLIB_EXTERN void (*BGLib_onTXCommandComplete)(void); // special function to run
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_DEFRAG
-    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_ps_defrag)(const struct ble_msg_flash_ps_defrag_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_ps_defrag)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_DUMP
-    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_ps_dump)(const struct ble_msg_flash_ps_dump_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_ps_dump)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_ERASE_ALL
-    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_ps_erase_all)(const struct ble_msg_flash_ps_erase_all_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_ps_erase_all)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_SAVE
@@ -1813,7 +1813,7 @@ BGLIB_EXTERN void (*BGLib_onTXCommandComplete)(void); // special function to run
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_ERASE
-    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_ps_erase)(const struct ble_msg_flash_ps_erase_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_flash_ps_erase)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_FLASH_ERASE_PAGE
@@ -1841,11 +1841,11 @@ BGLIB_EXTERN void (*BGLib_onTXCommandComplete)(void); // special function to run
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_USER_READ_RESPONSE
-    BGLIB_EXTERN void (*BGLib_ble_rsp_attributes_user_read_response)(const struct ble_msg_attributes_user_read_response_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attributes_user_read_response)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_USER_WRITE_RESPONSE
-    BGLIB_EXTERN void (*BGLib_ble_rsp_attributes_user_write_response)(const struct ble_msg_attributes_user_write_response_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_attributes_user_write_response)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_DISCONNECT
@@ -1937,7 +1937,7 @@ BGLIB_EXTERN void (*BGLib_onTXCommandComplete)(void); // special function to run
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SM_SET_BONDABLE_MODE
-    BGLIB_EXTERN void (*BGLib_ble_rsp_sm_set_bondable_mode)(const struct ble_msg_sm_set_bondable_mode_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_sm_set_bondable_mode)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SM_DELETE_BONDING
@@ -1945,7 +1945,7 @@ BGLIB_EXTERN void (*BGLib_onTXCommandComplete)(void); // special function to run
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SM_SET_PARAMETERS
-    BGLIB_EXTERN void (*BGLib_ble_rsp_sm_set_parameters)(const struct ble_msg_sm_set_parameters_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_sm_set_parameters)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SM_PASSKEY_ENTRY
@@ -1957,11 +1957,11 @@ BGLIB_EXTERN void (*BGLib_onTXCommandComplete)(void); // special function to run
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_SM_SET_OOB_DATA
-    BGLIB_EXTERN void (*BGLib_ble_rsp_sm_set_oob_data)(const struct ble_msg_sm_set_oob_data_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_sm_set_oob_data)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_PRIVACY_FLAGS
-    BGLIB_EXTERN void (*BGLib_ble_rsp_gap_set_privacy_flags)(const struct ble_msg_gap_set_privacy_flags_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_gap_set_privacy_flags)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_MODE
@@ -2053,7 +2053,7 @@ BGLIB_EXTERN void (*BGLib_onTXCommandComplete)(void); // special function to run
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_SET_TXPOWER
-    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_set_txpower)(const struct ble_msg_hardware_set_txpower_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_set_txpower)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_TIMER_COMPARATOR
@@ -2061,7 +2061,7 @@ BGLIB_EXTERN void (*BGLib_onTXCommandComplete)(void); // special function to run
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_IRQ_ENABLE
-    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_io_port_irq_enable)(const struct ble_msg_hardware_io_port_irq_enaBGLib_ble_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_hardware_io_port_irq_enable)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_IRQ_DIRECTION
@@ -2069,11 +2069,11 @@ BGLIB_EXTERN void (*BGLib_onTXCommandComplete)(void); // special function to run
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_TX
-    BGLIB_EXTERN void (*BGLib_ble_rsp_test_phy_tx)(const struct ble_msg_test_phy_tx_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_test_phy_tx)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_RX
-    BGLIB_EXTERN void (*BGLib_ble_rsp_test_phy_rx)(const struct ble_msg_test_phy_rx_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_test_phy_rx)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_END
@@ -2081,7 +2081,7 @@ BGLIB_EXTERN void (*BGLib_onTXCommandComplete)(void); // special function to run
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_RESET
-    BGLIB_EXTERN void (*BGLib_ble_rsp_test_phy_reset)(const struct ble_msg_test_phy_reset_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_test_phy_reset)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_TEST_GET_CHANNEL_MAP
@@ -2093,11 +2093,11 @@ BGLIB_EXTERN void (*BGLib_onTXCommandComplete)(void); // special function to run
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_TEST_CHANNEL_MODE
-    BGLIB_EXTERN void (*BGLib_ble_rsp_test_channel_mode)(const struct ble_msg_test_channel_mode_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_test_channel_mode)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_DFU_RESET
-    BGLIB_EXTERN void (*BGLib_ble_rsp_dfu_reset)(const struct ble_msg_dfu_reset_rsp_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_rsp_dfu_reset)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_COMMAND_DFU_FLASH_SET_ADDRESS
@@ -2133,7 +2133,7 @@ BGLIB_EXTERN void (*BGLib_onTXCommandComplete)(void); // special function to run
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_SYSTEM_NO_LICENSE_KEY
-    BGLIB_EXTERN void (*BGLib_ble_evt_system_no_license_key)(const struct ble_msg_system_no_license_key_evt_t* msg);
+    BGLIB_EXTERN void (*BGLib_ble_evt_system_no_license_key)(void);
 #endif
 
 #ifdef BGLIB_ENABLE_EVENT_SYSTEM_PROTOCOL_ERROR

@@ -35,6 +35,7 @@ THE SOFTWARE.
 ===============================================
 */
 
+#include <unistd.h>
 #include "BGLib.h"
 
 static uint8_t isScanActive = 0;
@@ -48,7 +49,7 @@ void onBusy() {
 }
 
 void onIdle() {
-    printf("idle\n");
+    /*TODO printf("idle\n")*/;
 }
 
 void onTimeout() {
@@ -77,7 +78,7 @@ void onTXCommandComplete() {
 // USER-DEFINED BGLIB RESPONSE CALLBACKS
 // ================================================================
 
-void my_rsp_system_hello(const struct ble_msg_system_hello_rsp_t* msg) {
+void my_rsp_system_hello(void) {
     printf("<--\tsystem_hello\n");
 }
 
@@ -131,7 +132,7 @@ void my_evt_gap_scan_response(const struct ble_msg_gap_scan_response_evt_t* msg)
 
 /*========== main ===========================================================*/
 
-main(void) {
+void main(void) {
     BGLib_init(0,0,1);
     // welcome!
     printf("BLE112 BGAPI Scanner Demo");

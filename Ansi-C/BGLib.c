@@ -39,6 +39,7 @@ THE SOFTWARE.
 ===============================================
 */
 
+#include <sys/time.h>
 #define BGLIB_EXTERN
 #include "BGLib.h"
 
@@ -612,10 +613,10 @@ uint8_t BGLib_parse(uint8_t ch, uint8_t packetMode) {
                 if (bgapiRXBuffer[2] == 0) {
                     if (false) { }
                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_RESET
-                        else if (bgapiRXBuffer[3] == 0) { if (BGLib_ble_rsp_system_reset) BGLib_ble_rsp_system_reset((const struct ble_msg_system_reset_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 0) { if (BGLib_ble_rsp_system_reset) BGLib_ble_rsp_system_reset(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_HELLO
-                        else if (bgapiRXBuffer[3] == 1) { if (BGLib_ble_rsp_system_hello) BGLib_ble_rsp_system_hello((const struct ble_msg_system_hello_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 1) { if (BGLib_ble_rsp_system_hello) BGLib_ble_rsp_system_hello(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ADDRESS_GET
                         else if (bgapiRXBuffer[3] == 2) { if (BGLib_ble_rsp_system_address_get) BGLib_ble_rsp_system_address_get((const struct ble_msg_system_address_get_rsp_t* )(bgapiRXBuffer + 4)); }
@@ -648,7 +649,7 @@ uint8_t BGLib_parse(uint8_t ch, uint8_t packetMode) {
                         else if (bgapiRXBuffer[3] == 11) { if (BGLib_ble_rsp_system_whitelist_remove) BGLib_ble_rsp_system_whitelist_remove((const struct ble_msg_system_whitelist_remove_rsp_t* )(bgapiRXBuffer + 4)); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_WHITELIST_CLEAR
-                        else if (bgapiRXBuffer[3] == 12) { if (BGLib_ble_rsp_system_whitelist_clear) BGLib_ble_rsp_system_whitelist_clear((const struct ble_msg_system_whitelist_clear_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 12) { if (BGLib_ble_rsp_system_whitelist_clear) BGLib_ble_rsp_system_whitelist_clear(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_RX
                         else if (bgapiRXBuffer[3] == 13) { if (BGLib_ble_rsp_system_endpoint_rx) BGLib_ble_rsp_system_endpoint_rx((const struct ble_msg_system_endpoint_rx_rsp_t* )(bgapiRXBuffer + 4)); }
@@ -660,13 +661,13 @@ uint8_t BGLib_parse(uint8_t ch, uint8_t packetMode) {
                 else if (bgapiRXBuffer[2] == 1) {
                     if (false) { }
                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_DEFRAG
-                        else if (bgapiRXBuffer[3] == 0) { if (BGLib_ble_rsp_flash_ps_defrag) BGLib_ble_rsp_flash_ps_defrag((const struct ble_msg_flash_ps_defrag_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 0) { if (BGLib_ble_rsp_flash_ps_defrag) BGLib_ble_rsp_flash_ps_defrag(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_DUMP
-                        else if (bgapiRXBuffer[3] == 1) { if (BGLib_ble_rsp_flash_ps_dump) BGLib_ble_rsp_flash_ps_dump((const struct ble_msg_flash_ps_dump_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 1) { if (BGLib_ble_rsp_flash_ps_dump) BGLib_ble_rsp_flash_ps_dump(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_ERASE_ALL
-                        else if (bgapiRXBuffer[3] == 2) { if (BGLib_ble_rsp_flash_ps_erase_all) BGLib_ble_rsp_flash_ps_erase_all((const struct ble_msg_flash_ps_erase_all_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 2) { if (BGLib_ble_rsp_flash_ps_erase_all) BGLib_ble_rsp_flash_ps_erase_all(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_SAVE
                         else if (bgapiRXBuffer[3] == 3) { if (BGLib_ble_rsp_flash_ps_save) BGLib_ble_rsp_flash_ps_save((const struct ble_msg_flash_ps_save_rsp_t* )(bgapiRXBuffer + 4)); }
@@ -675,7 +676,7 @@ uint8_t BGLib_parse(uint8_t ch, uint8_t packetMode) {
                         else if (bgapiRXBuffer[3] == 4) { if (BGLib_ble_rsp_flash_ps_load) BGLib_ble_rsp_flash_ps_load((const struct ble_msg_flash_ps_load_rsp_t* )(bgapiRXBuffer + 4)); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_ERASE
-                        else if (bgapiRXBuffer[3] == 5) { if (BGLib_ble_rsp_flash_ps_erase) BGLib_ble_rsp_flash_ps_erase((const struct ble_msg_flash_ps_erase_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 5) { if (BGLib_ble_rsp_flash_ps_erase) BGLib_ble_rsp_flash_ps_erase(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_ERASE_PAGE
                         else if (bgapiRXBuffer[3] == 6) { if (BGLib_ble_rsp_flash_erase_page) BGLib_ble_rsp_flash_erase_page((const struct ble_msg_flash_erase_page_rsp_t* )(bgapiRXBuffer + 4)); }
@@ -699,10 +700,10 @@ uint8_t BGLib_parse(uint8_t ch, uint8_t packetMode) {
                         else if (bgapiRXBuffer[3] == 2) { if (BGLib_ble_rsp_attributes_read_type) BGLib_ble_rsp_attributes_read_type((const struct ble_msg_attributes_read_type_rsp_t* )(bgapiRXBuffer + 4)); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_USER_READ_RESPONSE
-                        else if (bgapiRXBuffer[3] == 3) { if (BGLib_ble_rsp_attributes_user_read_response) BGLib_ble_rsp_attributes_user_read_response((const struct ble_msg_attributes_user_read_response_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 3) { if (BGLib_ble_rsp_attributes_user_read_response) BGLib_ble_rsp_attributes_user_read_response(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_USER_WRITE_RESPONSE
-                        else if (bgapiRXBuffer[3] == 4) { if (BGLib_ble_rsp_attributes_user_write_response) BGLib_ble_rsp_attributes_user_write_response((const struct ble_msg_attributes_user_write_response_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 4) { if (BGLib_ble_rsp_attributes_user_write_response) BGLib_ble_rsp_attributes_user_write_response(); }
                     #endif
                 }
                 else if (bgapiRXBuffer[2] == 3) {
@@ -780,13 +781,13 @@ uint8_t BGLib_parse(uint8_t ch, uint8_t packetMode) {
                         else if (bgapiRXBuffer[3] == 0) { if (BGLib_ble_rsp_sm_encrypt_start) BGLib_ble_rsp_sm_encrypt_start((const struct ble_msg_sm_encrypt_start_rsp_t* )(bgapiRXBuffer + 4)); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_SM_SET_BONDABLE_MODE
-                        else if (bgapiRXBuffer[3] == 1) { if (BGLib_ble_rsp_sm_set_bondable_mode) BGLib_ble_rsp_sm_set_bondable_mode((const struct ble_msg_sm_set_bondable_mode_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 1) { if (BGLib_ble_rsp_sm_set_bondable_mode) BGLib_ble_rsp_sm_set_bondable_mode(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_SM_DELETE_BONDING
                         else if (bgapiRXBuffer[3] == 2) { if (BGLib_ble_rsp_sm_delete_bonding) BGLib_ble_rsp_sm_delete_bonding((const struct ble_msg_sm_delete_bonding_rsp_t* )(bgapiRXBuffer + 4)); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_SM_SET_PARAMETERS
-                        else if (bgapiRXBuffer[3] == 3) { if (BGLib_ble_rsp_sm_set_parameters) BGLib_ble_rsp_sm_set_parameters((const struct ble_msg_sm_set_parameters_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 3) { if (BGLib_ble_rsp_sm_set_parameters) BGLib_ble_rsp_sm_set_parameters(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_SM_PASSKEY_ENTRY
                         else if (bgapiRXBuffer[3] == 4) { if (BGLib_ble_rsp_sm_passkey_entry) BGLib_ble_rsp_sm_passkey_entry((const struct ble_msg_sm_passkey_entry_rsp_t* )(bgapiRXBuffer + 4)); }
@@ -795,13 +796,13 @@ uint8_t BGLib_parse(uint8_t ch, uint8_t packetMode) {
                         else if (bgapiRXBuffer[3] == 5) { if (BGLib_ble_rsp_sm_get_bonds) BGLib_ble_rsp_sm_get_bonds((const struct ble_msg_sm_get_bonds_rsp_t* )(bgapiRXBuffer + 4)); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_SM_SET_OOB_DATA
-                        else if (bgapiRXBuffer[3] == 6) { if (BGLib_ble_rsp_sm_set_oob_data) BGLib_ble_rsp_sm_set_oob_data((const struct ble_msg_sm_set_oob_data_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 6) { if (BGLib_ble_rsp_sm_set_oob_data) BGLib_ble_rsp_sm_set_oob_data(); }
                     #endif
                 }
                 else if (bgapiRXBuffer[2] == 6) {
                     if (false) { }
                     #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_PRIVACY_FLAGS
-                        else if (bgapiRXBuffer[3] == 0) { if (BGLib_ble_rsp_gap_set_privacy_flags) BGLib_ble_rsp_gap_set_privacy_flags((const struct ble_msg_gap_set_privacy_flags_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 0) { if (BGLib_ble_rsp_gap_set_privacy_flags) BGLib_ble_rsp_gap_set_privacy_flags(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_MODE
                         else if (bgapiRXBuffer[3] == 1) { if (BGLib_ble_rsp_gap_set_mode) BGLib_ble_rsp_gap_set_mode((const struct ble_msg_gap_set_mode_rsp_t* )(bgapiRXBuffer + 4)); }
@@ -873,13 +874,13 @@ uint8_t BGLib_parse(uint8_t ch, uint8_t packetMode) {
                         else if (bgapiRXBuffer[3] == 11) { if (BGLib_ble_rsp_hardware_i2c_write) BGLib_ble_rsp_hardware_i2c_write((const struct ble_msg_hardware_i2c_write_rsp_t* )(bgapiRXBuffer + 4)); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_SET_TXPOWER
-                        else if (bgapiRXBuffer[3] == 12) { if (BGLib_ble_rsp_hardware_set_txpower) BGLib_ble_rsp_hardware_set_txpower((const struct ble_msg_hardware_set_txpower_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 12) { if (BGLib_ble_rsp_hardware_set_txpower) BGLib_ble_rsp_hardware_set_txpower(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_TIMER_COMPARATOR
                         else if (bgapiRXBuffer[3] == 13) { if (BGLib_ble_rsp_hardware_timer_comparator) BGLib_ble_rsp_hardware_timer_comparator((const struct ble_msg_hardware_timer_comparator_rsp_t* )(bgapiRXBuffer + 4)); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_IRQ_ENABLE
-                        else if (bgapiRXBuffer[3] == 14) { if (BGLib_ble_rsp_hardware_io_port_irq_enable) BGLib_ble_rsp_hardware_io_port_irq_enable((const struct ble_msg_hardware_io_port_irq_enable_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 14) { if (BGLib_ble_rsp_hardware_io_port_irq_enable) BGLib_ble_rsp_hardware_io_port_irq_enable(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_IRQ_DIRECTION
                         else if (bgapiRXBuffer[3] == 15) { if (BGLib_ble_rsp_hardware_io_port_irq_direction) BGLib_ble_rsp_hardware_io_port_irq_direction((const struct ble_msg_hardware_io_port_irq_direction_rsp_t* )(bgapiRXBuffer + 4)); }
@@ -888,16 +889,16 @@ uint8_t BGLib_parse(uint8_t ch, uint8_t packetMode) {
                 else if (bgapiRXBuffer[2] == 8) {
                     if (false) { }
                     #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_TX
-                        else if (bgapiRXBuffer[3] == 0) { if (BGLib_ble_rsp_test_phy_tx) BGLib_ble_rsp_test_phy_tx((const struct ble_msg_test_phy_tx_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 0) { if (BGLib_ble_rsp_test_phy_tx) BGLib_ble_rsp_test_phy_tx(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_RX
-                        else if (bgapiRXBuffer[3] == 1) { if (BGLib_ble_rsp_test_phy_rx) BGLib_ble_rsp_test_phy_rx((const struct ble_msg_test_phy_rx_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 1) { if (BGLib_ble_rsp_test_phy_rx) BGLib_ble_rsp_test_phy_rx(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_END
                         else if (bgapiRXBuffer[3] == 2) { if (BGLib_ble_rsp_test_phy_end) BGLib_ble_rsp_test_phy_end((const struct ble_msg_test_phy_end_rsp_t* )(bgapiRXBuffer + 4)); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_RESET
-                        else if (bgapiRXBuffer[3] == 3) { if (BGLib_ble_rsp_test_phy_reset) BGLib_ble_rsp_test_phy_reset((const struct ble_msg_test_phy_reset_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 3) { if (BGLib_ble_rsp_test_phy_reset) BGLib_ble_rsp_test_phy_reset(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_TEST_GET_CHANNEL_MAP
                         else if (bgapiRXBuffer[3] == 4) { if (BGLib_ble_rsp_test_get_channel_map) BGLib_ble_rsp_test_get_channel_map((const struct ble_msg_test_get_channel_map_rsp_t* )(bgapiRXBuffer + 4)); }
@@ -906,13 +907,13 @@ uint8_t BGLib_parse(uint8_t ch, uint8_t packetMode) {
                         else if (bgapiRXBuffer[3] == 5) { if (BGLib_ble_rsp_test_debug) BGLib_ble_rsp_test_debug((const struct ble_msg_test_debug_rsp_t* )(bgapiRXBuffer + 4)); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_TEST_CHANNEL_MODE
-                        else if (bgapiRXBuffer[3] == 6) { if (BGLib_ble_rsp_test_channel_mode) BGLib_ble_rsp_test_channel_mode((const struct ble_msg_test_channel_mode_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 6) { if (BGLib_ble_rsp_test_channel_mode) BGLib_ble_rsp_test_channel_mode(); }
                     #endif
                 }
                 else if (bgapiRXBuffer[2] == 9) {
                     if (false) { }
                     #ifdef BGLIB_ENABLE_COMMAND_DFU_RESET
-                        else if (bgapiRXBuffer[3] == 0) { if (BGLib_ble_rsp_dfu_reset) BGLib_ble_rsp_dfu_reset((const struct ble_msg_dfu_reset_rsp_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 0) { if (BGLib_ble_rsp_dfu_reset) BGLib_ble_rsp_dfu_reset(); }
                     #endif
                     #ifdef BGLIB_ENABLE_COMMAND_DFU_FLASH_SET_ADDRESS
                         else if (bgapiRXBuffer[3] == 1) { if (BGLib_ble_rsp_dfu_flash_set_address) BGLib_ble_rsp_dfu_flash_set_address((const struct ble_msg_dfu_flash_set_address_rsp_t* )(bgapiRXBuffer + 4)); }
@@ -951,7 +952,7 @@ uint8_t BGLib_parse(uint8_t ch, uint8_t packetMode) {
                         else if (bgapiRXBuffer[3] == 4) { if (BGLib_ble_evt_system_script_failure) BGLib_ble_evt_system_script_failure((const struct ble_msg_system_script_failure_evt_t* )(bgapiRXBuffer + 4)); }
                     #endif
                     #ifdef BGLIB_ENABLE_EVENT_SYSTEM_NO_LICENSE_KEY
-                        else if (bgapiRXBuffer[3] == 5) { if (BGLib_ble_evt_system_no_license_key) BGLib_ble_evt_system_no_license_key((const struct ble_msg_system_no_license_key_evt_t* )(bgapiRXBuffer + 4)); }
+                        else if (bgapiRXBuffer[3] == 5) { if (BGLib_ble_evt_system_no_license_key) BGLib_ble_evt_system_no_license_key(); }
                     #endif
                     #ifdef BGLIB_ENABLE_EVENT_SYSTEM_PROTOCOL_ERROR
                         else if (bgapiRXBuffer[3] == 6) { if (BGLib_ble_evt_system_protocol_error) BGLib_ble_evt_system_protocol_error((const struct ble_msg_system_protocol_error_evt_t* )(bgapiRXBuffer + 4)); }
