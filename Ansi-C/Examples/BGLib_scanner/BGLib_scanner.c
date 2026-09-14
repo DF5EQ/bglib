@@ -135,7 +135,7 @@ void my_evt_gap_scan_response(const struct ble_msg_gap_scan_response_evt_t* msg)
 void main(void) {
     BGLib_init(0,0,1);
     // welcome!
-    printf("BLE112 BGAPI Scanner Demo");
+    printf("BLE112 BGAPI Scanner Demo\n");
 
     // set up internal status handlers
     // (these are technically optional)
@@ -167,10 +167,9 @@ void main(void) {
     while (1) {
         // keep polling for new data from BLE
         BGLib_checkActivity(0);
-
         // check for input from the user
-        if (/*TODO Serial.available()*/1) {
-            uint8_t ch = /*TODO Serial.read()*/'1';
+        if (/*TODO Serial.available()*/true) {
+            uint8_t ch = /*TODO Serial.read()*/getchar();
             uint8_t status;
             if (ch == '0') {
                 // Reset BLE112 module

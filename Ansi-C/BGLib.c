@@ -489,7 +489,9 @@ void BGLib_init(void* module, void* output, uint8_t pMode) {
 
 uint8_t BGLib_checkActivity(uint16_t timeout) {
     uint16_t ch;
-    while ((ch = /*TODO uModule -> read()*/0) < 256 && (timeout == 0 || millis() - timeoutStart < timeout)) {
+printf("BGLib_checkActivity entry\n");
+    while ((ch = /*TODO uModule -> read()*/342) < 256 && (timeout == 0 || millis() - timeoutStart < timeout)) {
+printf("parse %02x\n", ch);
         BGLib_parse(ch, packetMode);
         if (timeout > 0) timeoutStart = millis();
     }
@@ -498,6 +500,7 @@ uint8_t BGLib_checkActivity(uint16_t timeout) {
         if (BGLib_onTimeout != 0) BGLib_onTimeout();
         BGLib_setBusy(false);
     }
+printf("BGLib_checkActivity exit\n");
     return busy;
 }
 
