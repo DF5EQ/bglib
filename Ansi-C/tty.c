@@ -29,11 +29,11 @@ int tty_open(void) {
   // Read in existing settings, and handle any error
   if (tcgetattr(serial_port, &tty_old) != 0) {
       printf("Error %i from tcgetattr: %s\n", errno, strerror(errno));
-      tty_deinit(serial_port);
+      tty_close();
       return 1;
   }
 
-  memcpy(&tty_new, &tty_old, sizeof(termios));
+  memcpy(&tty_new, &tty_old, sizeof(struct termios));
 
   tty_new.c_cflag &= ~PARENB;        // Clear parity bit, disabling parity (most common)
   tty_new.c_cflag &= ~CSTOPB;        // Clear stop field, only one stop bit used in communication (most common)
@@ -68,11 +68,13 @@ int tty_open(void) {
 }
 
 void tty_write(char ch) {
-  write(serial_port, ch);
+  write(serial_port, &ch, 1);
 }
 
 int tty_read(void) {
-  return read(serial_port);
+  char ch;
+  read(serial_port, &ch, 1);
+  return ch;
 }
 
 void tty_close(void) { 
