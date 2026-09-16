@@ -35,13 +35,29 @@ THE SOFTWARE.
 ===============================================
 */
 
+#include <termios.h>
+#include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 #include "BGLib.h"
 #include "tty.h"
 
 #define DEVICE "/dev/ttyACM0"
 
 static uint8_t isScanActive = 0;
+
+int getch(void) {
+    static struct termios oldattr;
+    static struct termios newattr;
+    int ch;
+    tcgetattr( STDIN_FILENO, &oldattr );
+    memcpy(&newattr,&oldattr,sizeof(struct termios));
+    newattr.c_lflag &= ~( ICANON | ECHO );
+    tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
+    ch = getchar();
+    tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
+    return ch;
+}
 
 // ================================================================
 // INTERNAL BGLIB CALLBACK FUNCTIONS
@@ -196,7 +212,7 @@ void main(void) {
         BGLib_checkActivity(0);
         // check for input from the user
         if (/*TODO Serial.available()*/true) {
-            ch = getchar();
+            ch = getch();
             switch (ch) {
                 case '0':
                     // Reset BLE112 module
