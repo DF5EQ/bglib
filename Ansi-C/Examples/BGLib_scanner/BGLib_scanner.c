@@ -37,6 +37,9 @@ THE SOFTWARE.
 
 #include <unistd.h>
 #include "BGLib.h"
+#include "tty.h"
+
+#define DEVICE "/dev/ttyACM0"
 
 static uint8_t isScanActive = 0;
 
@@ -58,16 +61,6 @@ void onTimeout() {
 
 void onBeforeTXCommand() {
     printf("TX started\n");
-    // wait for "hardware_io_port_status" event to come through, and parse it (and otherwise ignore it)
-    uint8_t* last;
-    while (1) {
-        BGLib_checkActivity(0);
-        last = BGLib_getLastEvent();
-        if (last[0] == 0x07 && last[1] == 0x00) break;
-    }
-    
-    // give a bit of a gap between parsing the wake-up event and allowing the command to go out
-    sleep(1);
 }
 
 void onTXCommandComplete() {
@@ -133,8 +126,40 @@ void my_evt_gap_scan_response(const struct ble_msg_gap_scan_response_evt_t* msg)
 /*========== main ===========================================================*/
 
 void main(void) {
-    BGLib_init(0,0,1);
-    // welcome!
+/*TODO remove the following test sequence */
+    /* switch of buffering for stdin */  
+    setvbuf( stdin, NULL, _IONBF , 0);
+
+    /* switch of buffering for stdout */  
+    setvbuf( stdout, NULL, _IONBF , 0);
+
+    /* switch of buffering for stderr */  
+    setvbuf( stderr, NULL, _IONBF , 0);
+
+    tty_open(DEVICE);
+
+    tty_write(0x00);
+    tty_write(0x00);
+    tty_write(0x00);
+    tty_write(0x01);
+
+    printf("received data: ");
+
+    printf("%02x ", tty_read());
+    printf("%02x ", tty_read());
+    printf("%02x ", tty_read());
+    printf("%02x ", tty_read());
+    printf("%02x ", tty_read());
+    printf("%02x ", tty_read());
+    printf("%02x ", tty_read());
+    printf("%02x ", tty_read());
+
+    printf("\n");
+
+    tty_close();
+/*TODO end of test sequence */
+
+    BGLib_init(DEVICE, 0);
     printf("BLE112 BGAPI Scanner Demo\n");
 
     // set up internal status handlers
@@ -158,55 +183,58 @@ void main(void) {
     BGLib_ble_evt_system_boot = my_evt_system_boot;
     BGLib_ble_evt_gap_scan_response = my_evt_gap_scan_response;
 
-    printf("Operations Menu:\n");
-    printf("0) Reset BLE112 module\n");
-    printf("1) Say hello to the BLE112 and wait for response\n");
-    printf("2) Toggle scanning for advertising BLE devices\n");
-    printf("Command?\n");
-
     while (1) {
+        uint8_t ch;
+
+        printf("Operations Menu:\n");
+        printf("0) Reset BLE112 module\n");
+        printf("1) Say hello to the BLE112 and wait for response\n");
+        printf("2) Toggle scanning for advertising BLE devices\n");
+        printf("Command?\n");
+
         // keep polling for new data from BLE
         BGLib_checkActivity(0);
         // check for input from the user
         if (/*TODO Serial.available()*/true) {
-            uint8_t ch = /*TODO Serial.read()*/getchar();
-            uint8_t status;
-            if (ch == '0') {
-                // Reset BLE112 module
-                printf("-->\tsystem_reset: { boot_in_dfu: 0 }\n");
-                BGLib_ble_cmd_system_reset(0);
-                while ((status = BGLib_checkActivity(1000)));
-                // system_reset doesn't have a response, but this BGLib
-                // implementation allows the system_boot event specially to
-                // set the "busy" flag to false for this particular case
-            }
-            if (ch == '1') {
-                // Say hello to the BLE112 and wait for response
-                printf("-->\tsystem_hello\n");
-                BGLib_ble_cmd_system_hello();
-                while ((status = BGLib_checkActivity(1000)));
-                // response should come back within milliseconds
-            }
-            else if (ch == '2') {
-                // Toggle scanning for advertising BLE devices
-                if (isScanActive) {
-                    isScanActive = 0;
-                    printf("-->\tgap_end_procedure\n");
-                    BGLib_ble_cmd_gap_end_procedure();
-                    while ((status = BGLib_checkActivity(1000)));
+            ch = getchar();
+            switch (ch) {
+                case '0':
+                    // Reset BLE112 module
+                    printf("-->\tsystem_reset: { boot_in_dfu: 0 }\n");
+                    BGLib_ble_cmd_system_reset(0);
+                    while (BGLib_checkActivity(1000));
+                    // system_reset doesn't have a response, but this BGLib
+                    // implementation allows the system_boot event specially to
+                    // set the "busy" flag to false for this particular case
+                    break;
+                case '1':
+                    // Say hello to the BLE112 and wait for response
+                    printf("-->\tsystem_hello\n");
+                    BGLib_ble_cmd_system_hello();
+                    while (BGLib_checkActivity(1000));
                     // response should come back within milliseconds
-                } else {
-                    isScanActive = 1;
-                    printf("-->\tgap_set_scan_parameters: { scan_interval: 0xC8, scan_window: 0xC8, active: 1 }\n");
-                    BGLib_ble_cmd_gap_set_scan_parameters(0xC8, 0xC8, 1);
-                    while ((status = BGLib_checkActivity(1000)));
-                    // response should come back within milliseconds
-                    printf("-->\tgap_discover: { mode: 2 (GENERIC) }\n");
-                    BGLib_ble_cmd_gap_discover(BGLIB_GAP_DISCOVER_GENERIC);
-                    while ((status = BGLib_checkActivity(1000)));
-                    // response should come back within milliseconds
-                    // scan response events may happen at any time after this
-                }
+                    break;
+                case '2':
+                    // Toggle scanning for advertising BLE devices
+                    if (isScanActive) {
+                        isScanActive = 0;
+                        printf("-->\tgap_end_procedure\n");
+                        BGLib_ble_cmd_gap_end_procedure();
+                        while (BGLib_checkActivity(1000));
+                        // response should come back within milliseconds
+                    } else {
+                        isScanActive = 1;
+                        printf("-->\tgap_set_scan_parameters: { scan_interval: 0xC8, scan_window: 0xC8, active: 1 }\n");
+                        BGLib_ble_cmd_gap_set_scan_parameters(0xC8, 0xC8, 1);
+                        while (BGLib_checkActivity(1000));
+                        // response should come back within milliseconds
+                        printf("-->\tgap_discover: { mode: 2 (GENERIC) }\n");
+                        BGLib_ble_cmd_gap_discover(BGLIB_GAP_DISCOVER_GENERIC);
+                        while (BGLib_checkActivity(1000));
+                        // response should come back within milliseconds
+                        // scan response events may happen at any time after this
+                    }
+                    break;
             }
         }
     }

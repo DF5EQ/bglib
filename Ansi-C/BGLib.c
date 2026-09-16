@@ -42,6 +42,7 @@ THE SOFTWARE.
 #include <sys/time.h>
 #define BGLIB_EXTERN
 #include "BGLib.h"
+#include "tty.h"
 
 /*===== private =============================================================*/
 
@@ -61,9 +62,6 @@ static const struct ble_msg* packetMessage;
 static struct ble_header packetHeader;
 static uint8_t* packetData;
 
-static void* uModule; // required UART object with module connection
-static void* uOutput; // optional UART object for host/debug connection
-
 static bool     busy;
 static uint8_t  packetMode;
 static uint8_t  lastCommand[2];
@@ -81,9 +79,7 @@ static uint32 millis (void) {
 
 /*===== public ==============================================================*/
 
-void BGLib_init(void* module, void* output, uint8_t pMode) {
-    uModule = module;
-    uOutput = output;
+void BGLib_init(char* device, uint8_t pMode) {
     packetMode = pMode;
 
     // initialize packet buffers
@@ -485,13 +481,13 @@ void BGLib_init(void* module, void* output, uint8_t pMode) {
     #ifdef BGLIB_ENABLE_EVENT_DFU_BOOT
         BGLib_ble_evt_dfu_boot = 0;
     #endif
+
+    tty_open(device);
 }
 
 uint8_t BGLib_checkActivity(uint16_t timeout) {
     uint16_t ch;
-printf("BGLib_checkActivity entry\n");
-    while ((ch = /*TODO uModule -> read()*/342) < 256 && (timeout == 0 || millis() - timeoutStart < timeout)) {
-printf("parse %02x\n", ch);
+    while ((ch = tty_read()) < 256 && (timeout == 0 || millis() - timeoutStart < timeout)) {
         BGLib_parse(ch, packetMode);
         if (timeout > 0) timeoutStart = millis();
     }
@@ -500,7 +496,6 @@ printf("parse %02x\n", ch);
         if (BGLib_onTimeout != 0) BGLib_onTimeout();
         BGLib_setBusy(false);
     }
-printf("BGLib_checkActivity exit\n");
     return busy;
 }
 
@@ -534,15 +529,6 @@ void BGLib_setBusy(bool busyEnabled) {
         lastError = false;
         if (BGLib_onIdle) BGLib_onIdle();
     }
-}
-
-// set/update UART port objects
-void BGLib_setModuleUART(void* module) {
-    uModule = module;
-}
-
-void BGLib_setOutputUART(void* output) {
-    uOutput = output;
 }
 
 uint8_t BGLib_parse(uint8_t ch, uint8_t packetMode) {
@@ -1072,7 +1058,6 @@ uint8_t BGLib_parse(uint8_t ch, uint8_t packetMode) {
             }
         }
     }
-
     return 0; // parsed successfully
 }
 
@@ -1099,12 +1084,21 @@ uint8_t BGLib_sendCommand(uint16_t len, uint8_t commandClass, uint8_t commandId,
         }
         Serial.println("]");
     #endif
+
     if (BGLib_onBeforeTXCommand) BGLib_onBeforeTXCommand();
     BGLib_setBusy(true);
-    if (packetMode) /*TODO uModule -> write(len + 4)*/; // outgoing packet length byte first
-    /*TODO uModule -> write(bgapiTXBuffer, len + 4)*/;
 
+    if (packetMode) { // outgoing packet length byte first
+        printf("packetMode: %d\n", len+4);
+        tty_write(len+4);
+    }
+
+    /*TODO uModule -> write(bgapiTXBuffer, len + 4)*/
+    for(int i=0; i<len+4; i++) {
+        tty_write(bgapiTXBuffer[i]);
+    };
     if (BGLib_onTXCommandComplete) BGLib_onTXCommandComplete();
+
     free(bgapiTXBuffer);
     return 0;
 }

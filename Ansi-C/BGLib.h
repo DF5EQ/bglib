@@ -1328,7 +1328,7 @@ struct ble_msg_dfu_boot_evt_t {
 
 /*----- public --------------------------------------------------------------*/
 
-void    BGLib_init( void* module, void* output, uint8_t pMode);
+void    BGLib_init( char* dev, uint8_t pMode);
 uint8_t BGLib_checkActivity(uint16_t timeout);
 uint8_t BGLib_checkError(void);
 uint8_t BGLib_checkTimeout(void);

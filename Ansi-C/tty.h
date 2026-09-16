@@ -1,9 +1,11 @@
 #ifndef TTY_H
 #define TTY_h
 
-int  tty_open(void);
-void tty_write(char ch);
-int  tty_read(void);
-void tty_close(void);
+#include <stdint.h>
+
+int      tty_open(char* dev);
+void     tty_write(char ch);
+uint16_t tty_read(void);
+void     tty_close(void);
 
 #endif //TTY_H
