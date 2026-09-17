@@ -215,9 +215,11 @@ void main(void) {
                         // scan response events may happen at any time after this
                     }
                     break;
-                case 'x':
-                    /* exit program */
+                case 'x': /* exit program */
                     return;
+                default: /* unknown command */
+                    printf("unknown command: %c\n", ch);
+                    break;
             }
         }
     }
