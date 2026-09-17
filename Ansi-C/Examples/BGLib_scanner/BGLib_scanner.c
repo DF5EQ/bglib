@@ -10,7 +10,7 @@
 //                   Add support for BLE wake-up
 //      2012-11-14 - Initial release
 
-/* ============================================
+/*=============================================================================
 BGLib Ansi-C interface library code is placed under the MIT license
 Copyright (c) 2014 Jeff Rowberg for Arduino/C++
 Copyright (c) 2026 Peter Bägel for Ansi-C
@@ -32,21 +32,27 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-===============================================
-*/
+=============================================================================*/
 
 #include <termios.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdint.h>
+#include <stdbool.h>
 #include "BGLib.h"
 #include "serial.h"
 
+/*========== private symbols ================================================*/
 #define DEVICE "/dev/ttyACM0"
 
-static uint8_t isScanActive = 0;
+/*========== private variables ==============================================*/
+static bool isScanActive = false;
 
-int getch(void) {
+/*========== private functions ==============================================*/
+
+/* read one character from stdin without buffering and echo */
+static int getch(void) {
     static struct termios oldattr;
     static struct termios newattr;
     int ch;
@@ -59,9 +65,9 @@ int getch(void) {
     return ch;
 }
 
-// ================================================================
-// INTERNAL BGLIB CALLBACK FUNCTIONS
-// ================================================================
+/*========== callback functions =============================================*/
+
+/*---------- internal BGLib status callback functions -----------------------*/
 
 void onBusy() {
     printf("busy\n");
@@ -83,9 +89,7 @@ void onTXCommandComplete() {
     printf("TX complete\n");
 }
 
-// ================================================================
-// USER-DEFINED BGLIB RESPONSE CALLBACKS
-// ================================================================
+/*---------- user-defined BGLib resonse callback functions ------------------*/
 
 void my_rsp_system_hello(void) {
     printf("<--\tsystem_hello\n");
@@ -103,9 +107,7 @@ void my_rsp_gap_end_procedure(const struct ble_msg_gap_end_procedure_rsp_t* msg)
     printf("<--\tgap_end_procedure: { result: %x }\n", msg->result);
 }
 
-// ================================================================
-// USER-DEFINED BGLIB EVENT CALLBACKS
-// ================================================================
+/*---------- user-defined BGLib event callback functions --------------------*/
 
 void my_evt_system_boot(const struct ble_msg_system_boot_evt_t* msg) {
     printf("###\tsystem_boot: { ");
@@ -138,64 +140,28 @@ void my_evt_gap_scan_response(const struct ble_msg_gap_scan_response_evt_t* msg)
     printf(" }");
 }
 
-
-/*========== main ===========================================================*/
+/*========== public functions ===============================================*/
 
 void main(void) {
-/*TODO remove the following test sequence */
-    /* switch of buffering for stdin */  
-    setvbuf( stdin, NULL, _IONBF , 0);
-
-    /* switch of buffering for stdout */  
-    setvbuf( stdout, NULL, _IONBF , 0);
-
-    /* switch of buffering for stderr */  
-    setvbuf( stderr, NULL, _IONBF , 0);
-
-    serial_open(DEVICE);
-
-    serial_write(0x00);
-    serial_write(0x00);
-    serial_write(0x00);
-    serial_write(0x01);
-
-    printf("received data: ");
-
-    printf("%02x ", serial_read());
-    printf("%02x ", serial_read());
-    printf("%02x ", serial_read());
-    printf("%02x ", serial_read());
-    printf("%02x ", serial_read());
-    printf("%02x ", serial_read());
-    printf("%02x ", serial_read());
-    printf("%02x ", serial_read());
-
-    printf("\n");
-
-    serial_close();
-/*TODO end of test sequence */
-
     BGLib_init(DEVICE, 0);
     printf("BLE112 BGAPI Scanner Demo\n");
 
-    // set up internal status handlers
-    // (these are technically optional)
+    /* set up internal status handlers */
     BGLib_onBusy = onBusy;
     BGLib_onIdle = onIdle;
     BGLib_onTimeout = onTimeout;
     
-    // ONLY enable these if you are using the <wakeup_pin> parameter in your firmware's hardware.xml file
+    /* only enable these if you are using the <wakeup_pin> parameter in your firmware's hardware.xml file */
     BGLib_onBeforeTXCommand = onBeforeTXCommand;
     BGLib_onTXCommandComplete = onTXCommandComplete;
 
-    // set up BGLib response handlers (called almost immediately after sending commands)
-    // (these are also technicaly optional)
+    /* set up BGLib response handlers (called almost immediately after sending commands) */
     BGLib_ble_rsp_system_hello = my_rsp_system_hello;
     BGLib_ble_rsp_gap_set_scan_parameters = my_rsp_gap_set_scan_parameters;
     BGLib_ble_rsp_gap_discover = my_rsp_gap_discover;
     BGLib_ble_rsp_gap_end_procedure = my_rsp_gap_end_procedure;
 
-    // set up BGLib event handlers (called at unknown times)
+    /* set up BGLib event handlers (called at unknown times) */
     BGLib_ble_evt_system_boot = my_evt_system_boot;
     BGLib_ble_evt_gap_scan_response = my_evt_gap_scan_response;
 
@@ -206,6 +172,7 @@ void main(void) {
         printf("0) Reset BLE112 module\n");
         printf("1) Say hello to the BLE112 and wait for response\n");
         printf("2) Toggle scanning for advertising BLE devices\n");
+        printf("x) exit programm\n");
         printf("Command?\n");
 
         // keep polling for new data from BLE
@@ -214,8 +181,7 @@ void main(void) {
         if (/*TODO Serial.available()*/true) {
             ch = getch();
             switch (ch) {
-                case '0':
-                    // Reset BLE112 module
+                case '0': /* Reset BLE112 module */
                     printf("-->\tsystem_reset: { boot_in_dfu: 0 }\n");
                     BGLib_ble_cmd_system_reset(0);
                     while (BGLib_checkActivity(1000));
@@ -223,15 +189,13 @@ void main(void) {
                     // implementation allows the system_boot event specially to
                     // set the "busy" flag to false for this particular case
                     break;
-                case '1':
-                    // Say hello to the BLE112 and wait for response
+                case '1': /* Say hello to the BLE112 and wait for response */
                     printf("-->\tsystem_hello\n");
                     BGLib_ble_cmd_system_hello();
                     while (BGLib_checkActivity(1000));
                     // response should come back within milliseconds
                     break;
-                case '2':
-                    // Toggle scanning for advertising BLE devices
+                case '2': /* Toggle scanning for advertising BLE devices */
                     if (isScanActive) {
                         isScanActive = 0;
                         printf("-->\tgap_end_procedure\n");
@@ -251,6 +215,9 @@ void main(void) {
                         // scan response events may happen at any time after this
                     }
                     break;
+                case 'x':
+                    /* exit program */
+                    return;
             }
         }
     }
