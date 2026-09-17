@@ -48,22 +48,10 @@ THE SOFTWARE.
 
 /*========== private variables ==============================================*/
 static bool isScanActive = false;
+static struct termios oldattr;
+static struct termios newattr;
 
 /*========== private functions ==============================================*/
-
-/* read one character from stdin without buffering and echo */
-static int getch(void) {
-    static struct termios oldattr;
-    static struct termios newattr;
-    int ch;
-    tcgetattr( STDIN_FILENO, &oldattr );
-    memcpy(&newattr,&oldattr,sizeof(struct termios));
-    newattr.c_lflag &= ~( ICANON | ECHO );
-    tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
-    ch = getchar();
-    tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
-    return ch;
-}
 
 /*========== callback functions =============================================*/
 
@@ -143,6 +131,17 @@ void my_evt_gap_scan_response(const struct ble_msg_gap_scan_response_evt_t* msg)
 /*========== public functions ===============================================*/
 
 void main(void) {
+    uint8_t ch;
+
+    /* save stdin attributes */
+    tcgetattr( STDIN_FILENO, &oldattr );
+    /* make stdin non-canonnical and non-blocking */
+    memcpy(&newattr,&oldattr,sizeof(struct termios));
+    newattr.c_lflag &= ~( ICANON | ECHO );
+    newattr.c_cc[VTIME] = 0;    
+    newattr.c_cc[VMIN]  = 0;
+    tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
+
     BGLib_init(DEVICE, 0);
     printf("BLE112 BGAPI Scanner Demo\n");
 
@@ -165,9 +164,7 @@ void main(void) {
     BGLib_ble_evt_system_boot = my_evt_system_boot;
     BGLib_ble_evt_gap_scan_response = my_evt_gap_scan_response;
 
-    while (1) {
-        uint8_t ch;
-
+    while (ch != 'x') {
         printf("Operations Menu:\n");
         printf("0) Reset BLE112 module\n");
         printf("1) Say hello to the BLE112 and wait for response\n");
@@ -178,8 +175,7 @@ void main(void) {
         // keep polling for new data from BLE
         BGLib_checkActivity(0);
         // check for input from the user
-        if (/*TODO Serial.available()*/true) {
-            ch = getch();
+        if (read(STDIN_FILENO,&ch,1) > 0) {
             switch (ch) {
                 case '0': /* Reset BLE112 module */
                     printf("-->\tsystem_reset: { boot_in_dfu: 0 }\n");
@@ -216,12 +212,16 @@ void main(void) {
                     }
                     break;
                 case 'x': /* exit program */
-                    return;
+                    break;
                 default: /* unknown command */
-                    printf("unknown command: %c\n", ch);
+                    printf("unknown command: %c %02x\n", ch, ch);
                     break;
             }
         }
     }
+    /* restore stdin attributes */
+    tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
+    printf("Bye\n");
+    sleep(3);
 }
 
