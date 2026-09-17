@@ -40,7 +40,7 @@ THE SOFTWARE.
 #include <unistd.h>
 #include <string.h>
 #include "BGLib.h"
-#include "tty.h"
+#include "serial.h"
 
 #define DEVICE "/dev/ttyACM0"
 
@@ -152,27 +152,27 @@ void main(void) {
     /* switch of buffering for stderr */  
     setvbuf( stderr, NULL, _IONBF , 0);
 
-    tty_open(DEVICE);
+    serial_open(DEVICE);
 
-    tty_write(0x00);
-    tty_write(0x00);
-    tty_write(0x00);
-    tty_write(0x01);
+    serial_write(0x00);
+    serial_write(0x00);
+    serial_write(0x00);
+    serial_write(0x01);
 
     printf("received data: ");
 
-    printf("%02x ", tty_read());
-    printf("%02x ", tty_read());
-    printf("%02x ", tty_read());
-    printf("%02x ", tty_read());
-    printf("%02x ", tty_read());
-    printf("%02x ", tty_read());
-    printf("%02x ", tty_read());
-    printf("%02x ", tty_read());
+    printf("%02x ", serial_read());
+    printf("%02x ", serial_read());
+    printf("%02x ", serial_read());
+    printf("%02x ", serial_read());
+    printf("%02x ", serial_read());
+    printf("%02x ", serial_read());
+    printf("%02x ", serial_read());
+    printf("%02x ", serial_read());
 
     printf("\n");
 
-    tty_close();
+    serial_close();
 /*TODO end of test sequence */
 
     BGLib_init(DEVICE, 0);

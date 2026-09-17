@@ -42,7 +42,7 @@ THE SOFTWARE.
 #include <sys/time.h>
 #define BGLIB_EXTERN
 #include "BGLib.h"
-#include "tty.h"
+#include "serial.h"
 
 /*===== private =============================================================*/
 
@@ -482,12 +482,12 @@ void BGLib_init(char* device, uint8_t pMode) {
         BGLib_ble_evt_dfu_boot = 0;
     #endif
 
-    tty_open(device);
+    serial_open(device);
 }
 
 uint8_t BGLib_checkActivity(uint16_t timeout) {
     uint16_t ch;
-    while ((ch = tty_read()) < 256 && (timeout == 0 || millis() - timeoutStart < timeout)) {
+    while ((ch = serial_read()) < 256 && (timeout == 0 || millis() - timeoutStart < timeout)) {
         BGLib_parse(ch, packetMode);
         if (timeout > 0) timeoutStart = millis();
     }
@@ -1090,12 +1090,12 @@ uint8_t BGLib_sendCommand(uint16_t len, uint8_t commandClass, uint8_t commandId,
 
     if (packetMode) { // outgoing packet length byte first
         printf("packetMode: %d\n", len+4);
-        tty_write(len+4);
+        serial_write(len+4);
     }
 
     /*TODO uModule -> write(bgapiTXBuffer, len + 4)*/
     for(int i=0; i<len+4; i++) {
-        tty_write(bgapiTXBuffer[i]);
+        serial_write(bgapiTXBuffer[i]);
     };
     if (BGLib_onTXCommandComplete) BGLib_onTXCommandComplete();
 
