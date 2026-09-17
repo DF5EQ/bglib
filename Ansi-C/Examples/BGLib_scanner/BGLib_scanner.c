@@ -83,6 +83,10 @@ void my_rsp_system_hello(void) {
     printf("<--\tsystem_hello\n");
 }
 
+void my_rsp_system_address_get(const struct ble_msg_system_address_get_rsp_t* msg) {
+    printf("<--\tlocal Bluetooth address: { result: %x%x%x%x%x%x }\n", msg->address.addr[0], msg->address.addr[1], msg->address.addr[2], msg->address.addr[3], msg->address.addr[4], msg->address.addr[5]);
+}
+
 void my_rsp_gap_set_scan_parameters(const struct ble_msg_gap_set_scan_parameters_rsp_t* msg) {
     printf("<--\tgap_set_scan_parameters: { result: %x }\n", msg->result);
 }
@@ -156,6 +160,7 @@ void main(void) {
 
     /* set up BGLib response handlers (called almost immediately after sending commands) */
     BGLib_ble_rsp_system_hello = my_rsp_system_hello;
+    BGLib_ble_rsp_system_address_get = my_rsp_system_address_get;
     BGLib_ble_rsp_gap_set_scan_parameters = my_rsp_gap_set_scan_parameters;
     BGLib_ble_rsp_gap_discover = my_rsp_gap_discover;
     BGLib_ble_rsp_gap_end_procedure = my_rsp_gap_end_procedure;
@@ -168,7 +173,8 @@ void main(void) {
         printf("Menu:\n");
         printf("0) Reset BLE112 module\n");
         printf("1) Say hello to the BLE112 and wait for response\n");
-        printf("2) Toggle scanning for advertising BLE devices\n");
+        printf("2) Show Bluetooth address of local device\n");
+        printf("3) Toggle scanning for advertising BLE devices\n");
         printf("x) exit programm\n");
         printf("Command?\n");
 
@@ -191,7 +197,13 @@ void main(void) {
                 while (BGLib_checkActivity(1000));
                 // response should come back within milliseconds
                 break;
-            case '2': /* Toggle scanning for advertising BLE devices */
+            case '2': /* get Bluetooth address of the local device */
+                printf("-->\tlocal Bluetooth address\n");
+                BGLib_ble_cmd_system_address_get();
+                while (BGLib_checkActivity(1000));
+                // response should come back within milliseconds
+                break;
+            case '3': /* Toggle scanning for advertising BLE devices */
                 if (isScanActive) {
                     isScanActive = 0;
                     printf("-->\tgap_end_procedure\n");
