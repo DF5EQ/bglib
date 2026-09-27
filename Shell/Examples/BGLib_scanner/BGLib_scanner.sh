@@ -34,31 +34,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 # =============================================================================
-# 
-# #include <SoftwareSerial.h>
 
 # include the library
 . ../../BGLib.sh
 
-# SoftwareSerial bleSerialPort(2, 3); // RX, TX
-# BGLib ble112((HardwareSerial *)&bleSerialPort, 0, 1);
-# 
-# void setup() {
-#     // initialize status LED
-#     pinMode(LED_PIN, OUTPUT);
-#     digitalWrite(LED_PIN, LOW);
-# 
-#     // initialize BLE wake-up pin to allow (not force) sleep mode
-#     pinMode(BLE_WAKEUP_PIN, OUTPUT);
-#     digitalWrite(BLE_WAKEUP_PIN, LOW);
-# 
-#     // open Arduino USB serial (and wait, if we're using Leonardo)
-#     Serial.begin(115200);
-#     while (!Serial);
-# 
-#     // welcome!
-#     Serial.println("BLE112 BGAPI Scanner Demo");
-# 
+SERIAL_PORT=/dev/ttyACM0
+CAPTURE_FILE=$(mktemp)
+
+setup() {
+    # welcome!
+    echo "BLE112 BGAPI Scanner Demo"
+
 #     // set up internal status handlers
 #     // (these are technically optional)
 #     ble112.onBusy = onBusy;
@@ -69,9 +55,9 @@
 #     ble112.onBeforeTXCommand = onBeforeTXCommand;
 #     ble112.onTXCommandComplete = onTXCommandComplete;
 # 
-#     // set up BGLib response handlers (called almost immediately after sending commands)
+    # set up BGLib response handlers (called almost immediately after sending commands)
 #     // (these are also technicaly optional)
-BGLib_ble_rsp_system_hello=my_rsp_system_hello
+    BGLib_ble_rsp_system_hello=my_rsp_system_hello
 #     ble112.ble_rsp_gap_set_scan_parameters = my_rsp_gap_set_scan_parameters;
 #     ble112.ble_rsp_gap_discover = my_rsp_gap_discover;
 #     ble112.ble_rsp_gap_end_procedure = my_rsp_gap_end_procedure;
@@ -80,10 +66,10 @@ BGLib_ble_rsp_system_hello=my_rsp_system_hello
 #     ble112.ble_evt_system_boot = my_evt_system_boot;
 #     ble112.ble_evt_gap_scan_response = my_evt_gap_scan_response;
 # 
-#     // set the data rate for the SoftwareSerial port
-#     bleSerialPort.begin(38400);
-# }
-# 
+    # configure the serial port
+    stty -F $SERIAL_PORT 9600 raw -echo
+}
+
 main() {
     local isScanActive=false
 
@@ -140,9 +126,9 @@ main() {
     done # while true
 }
 
-# // ================================================================
-# // INTERNAL BGLIB CLASS CALLBACK FUNCTIONS
-# // ================================================================
+# =============================================================================
+# INTERNAL BGLIB CLASS CALLBACK FUNCTIONS
+# =============================================================================
 # 
 # void onBusy() {
 #     // turn LED on when we're busy
@@ -179,9 +165,9 @@ main() {
 #     digitalWrite(BLE_WAKEUP_PIN, LOW);
 # }
 # 
-# // ================================================================
-# // USER-DEFINED BGLIB RESPONSE CALLBACKS
-# // ================================================================
+# =============================================================================
+# USER-DEFINED BGLIB RESPONSE CALLBACKS
+# =============================================================================
 # 
 my_rsp_system_hello() {
     msg=$1
@@ -206,9 +192,9 @@ my_rsp_system_hello() {
 #     Serial.println(" }");
 # }
 # 
-# // ================================================================
-# // USER-DEFINED BGLIB EVENT CALLBACKS
-# // ================================================================
+# =============================================================================
+# USER-DEFINED BGLIB EVENT CALLBACKS
+# =============================================================================
 # 
 # void my_evt_system_boot(const ble_msg_system_boot_evt_t *msg) {
 #     Serial.print("###\tsystem_boot: { ");
@@ -244,6 +230,7 @@ my_rsp_system_hello() {
 # }
 
 # here starts the execution
+setup
 main
 
 # test for callback function
