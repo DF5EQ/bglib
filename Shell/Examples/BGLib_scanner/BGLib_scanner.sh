@@ -41,11 +41,6 @@
 # SoftwareSerial bleSerialPort(2, 3); // RX, TX
 # BGLib ble112((HardwareSerial *)&bleSerialPort, 0, 1);
 # 
-# uint8_t isScanActive = 0;
-# 
-# #define LED_PIN 13          // Arduino Uno LED
-# #define BLE_WAKEUP_PIN 5    // Assuming digital pin 5 is connected to BLE wake-up pin (P1_6 in my firmware)
-# 
 # void setup() {
 #     // initialize status LED
 #     pinMode(LED_PIN, OUTPUT);
