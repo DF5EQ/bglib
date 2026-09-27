@@ -39,7 +39,8 @@
 # THE SOFTWARE.
 # =============================================================================
 # 
-# #include "BGLib.h"
+# include definitions
+. ../../BGLib.h.sh
 # 
 # BGLib::BGLib(HardwareSerial *module, HardwareSerial *output, uint8_t pMode) {
 #     uModule = module;
@@ -1067,17 +1068,20 @@
 # }
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_RESET
-# uint8_t BGLib::ble_cmd_system_reset(uint8 boot_in_dfu) {
+ble_cmd_system_reset () {
+      boot_in_dfu=$1
+      echo "ble_cmd_system_reset - boot_in_dfu=$boot_in_dfu"
 #     uint8_t d[1];
 #     memcpy(d + 0, &boot_in_dfu, sizeof(uint8));
 #     return sendCommand(1, 0, 0, d);
-# }
+}
 # #endif
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_HELLO
-# uint8_t BGLib::ble_cmd_system_hello() {
+ble_cmd_system_hello() {
+    echo "ble_cmd_system_hello"
 #     return sendCommand(0, 0, 1);
-# }
+}
 # #endif
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ADDRESS_GET
@@ -1586,11 +1590,13 @@
 # #endif
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_GAP_DISCOVER
-# uint8_t BGLib::ble_cmd_gap_discover(uint8 mode) {
+ble_cmd_gap_discover() {
+    mode=$1
+    echo "ble_cmd_gap_discover - mode=$mode"
 #     uint8_t d[1];
 #     memcpy(d + 0, &mode, sizeof(uint8));
 #     return sendCommand(1, 6, 2, d);
-# }
+}
 # #endif
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_GAP_CONNECT_DIRECT
@@ -1607,9 +1613,10 @@
 # #endif
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_GAP_END_PROCEDURE
-# uint8_t BGLib::ble_cmd_gap_end_procedure() {
+ble_cmd_gap_end_procedure() {
+    echo "ble_cmd_gap_end_procedure"
 #     return sendCommand(0, 6, 4);
-# }
+}
 # #endif
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_GAP_CONNECT_SELECTIVE
@@ -1634,13 +1641,17 @@
 # #endif
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_SCAN_PARAMETERS
-# uint8_t BGLib::ble_cmd_gap_set_scan_parameters(uint16 scan_interval, uint16 scan_window, uint8 active) {
+ble_cmd_gap_set_scan_parameters() {
+    scan_interval=$1
+    scan_window=$2
+    active=$3
+    echo "ble_cmd_gap_set_scan_parameters - scan_interval=$scan_interval - scan_window=$scan_window - active=$active"
 #     uint8_t d[5];
 #     memcpy(d + 0, &scan_interval, sizeof(uint16));
 #     memcpy(d + 2, &scan_window, sizeof(uint16));
 #     memcpy(d + 4, &active, sizeof(uint8));
 #     return sendCommand(5, 6, 7, d);
-# }
+}
 # #endif
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_ADV_PARAMETERS

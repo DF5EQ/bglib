@@ -97,7 +97,7 @@
 # #define BGLIB_GAP_UNDIRECTED_CONNECTABLE                            2
 # #define BGLIB_GAP_SCANNABLE_CONNECTABLE                             3
 # #define BGLIB_GAP_DISCOVER_LIMITED                                  0
-# #define BGLIB_GAP_DISCOVER_GENERIC                                  1
+readonly BGLIB_GAP_DISCOVER_GENERIC=1
 # #define BGLIB_GAP_DISCOVER_OBSERVATION                              2
 # #define BGLIB_GAP_AD_TYPE_NONE                                      0
 # #define BGLIB_GAP_AD_TYPE_FLAGS                                     1
