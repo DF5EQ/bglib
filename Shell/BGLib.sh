@@ -448,7 +448,9 @@
 #     #endif
 # }
 # 
-# uint8_t BGLib::checkActivity(uint16_t timeout) {
+BGLLib.checkActivity() {
+    timeout=$1
+    echo "checkActivity - timeout=$timeout"
 #     uint16_t ch;
 #     while ((ch = uModule -> read()) < 256 && (timeout == 0 || millis() - timeoutStart < timeout)) {
 #         parse(ch);
@@ -460,7 +462,7 @@
 #         setBusy(false);
 #     }
 #     return busy;
-# }
+}
 # 
 # uint8_t BGLib::checkError() {
 #     return lastError;
@@ -1068,7 +1070,7 @@
 # }
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_RESET
-ble_cmd_system_reset () {
+BGLLib.ble_cmd_system_reset () {
       boot_in_dfu=$1
       echo "ble_cmd_system_reset - boot_in_dfu=$boot_in_dfu"
 #     uint8_t d[1];
@@ -1078,7 +1080,7 @@ ble_cmd_system_reset () {
 # #endif
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_HELLO
-ble_cmd_system_hello() {
+BGLLib.ble_cmd_system_hello() {
     echo "ble_cmd_system_hello"
 #     return sendCommand(0, 0, 1);
 }
@@ -1590,7 +1592,7 @@ ble_cmd_system_hello() {
 # #endif
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_GAP_DISCOVER
-ble_cmd_gap_discover() {
+BGLLib.ble_cmd_gap_discover() {
     mode=$1
     echo "ble_cmd_gap_discover - mode=$mode"
 #     uint8_t d[1];
@@ -1613,7 +1615,7 @@ ble_cmd_gap_discover() {
 # #endif
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_GAP_END_PROCEDURE
-ble_cmd_gap_end_procedure() {
+BGLLib.ble_cmd_gap_end_procedure() {
     echo "ble_cmd_gap_end_procedure"
 #     return sendCommand(0, 6, 4);
 }
@@ -1641,7 +1643,7 @@ ble_cmd_gap_end_procedure() {
 # #endif
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_SCAN_PARAMETERS
-ble_cmd_gap_set_scan_parameters() {
+BGLLib.ble_cmd_gap_set_scan_parameters() {
     scan_interval=$1
     scan_window=$2
     active=$3
