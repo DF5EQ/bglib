@@ -63,6 +63,7 @@
 #     #endif
 #     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_HELLO
 #         ble_rsp_system_hello = 0;
+BGLIB_ble_rsp_system_hello=
 #     #endif
 #     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ADDRESS_GET
 #         ble_rsp_system_address_get = 0;
@@ -453,7 +454,7 @@ BGLLib.checkActivity() {
     echo "checkActivity - timeout=$timeout"
 #     uint16_t ch;
 #     while ((ch = uModule -> read()) < 256 && (timeout == 0 || millis() - timeoutStart < timeout)) {
-#         parse(ch);
+          BGLib.parse $ch
 #         if (timeout > 0) timeoutStart = millis();
 #     }
 #     if (timeout > 0 && busy && millis() - timeoutStart >= timeout) {
@@ -505,7 +506,9 @@ BGLLib.checkActivity() {
 #     uOutput = output;
 # }
 # 
-# uint8_t BGLib::parse(uint8_t ch, uint8_t packetMode) {
+BGLib.parse() {
+    ch=$1
+    packetMode=$2
 #     #ifdef DEBUG
 #         // DEBUG: output hex value of incoming character
 #         if (ch < 16) Serial.write(0x30);    // leading '0'
@@ -580,6 +583,7 @@ BGLLib.checkActivity() {
 #                     #endif
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_HELLO
 #                         else if (bgapiRXBuffer[3] == 1) { if (ble_rsp_system_hello) ble_rsp_system_hello((const struct ble_msg_system_hello_rsp_t *)(bgapiRXBuffer + 4)); }
+$BGLib_ble_rsp_system_hello
 #                     #endif
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ADDRESS_GET
 #                         else if (bgapiRXBuffer[3] == 2) { if (ble_rsp_system_address_get) ble_rsp_system_address_get((const struct ble_msg_system_address_get_rsp_t *)(bgapiRXBuffer + 4)); }
@@ -1034,7 +1038,7 @@ BGLLib.checkActivity() {
 #     }
 # 
 #     return 0; // parsed successfully
-# }
+}
 # 
 # uint8_t BGLib::sendCommand(uint16_t len, uint8_t commandClass, uint8_t commandId, void *payload) {
 #     bgapiTXBuffer = (uint8_t *)malloc(len + 4);

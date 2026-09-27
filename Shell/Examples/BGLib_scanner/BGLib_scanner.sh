@@ -71,7 +71,7 @@
 # 
 #     // set up BGLib response handlers (called almost immediately after sending commands)
 #     // (these are also technicaly optional)
-#     ble112.ble_rsp_system_hello = my_rsp_system_hello;
+BGLib_ble_rsp_system_hello=my_rsp_system_hello
 #     ble112.ble_rsp_gap_set_scan_parameters = my_rsp_gap_set_scan_parameters;
 #     ble112.ble_rsp_gap_discover = my_rsp_gap_discover;
 #     ble112.ble_rsp_gap_end_procedure = my_rsp_gap_end_procedure;
@@ -183,9 +183,10 @@ main() {
 # // USER-DEFINED BGLIB RESPONSE CALLBACKS
 # // ================================================================
 # 
-# void my_rsp_system_hello(const ble_msg_system_hello_rsp_t *msg) {
-#     Serial.println("<--\tsystem_hello");
-# }
+my_rsp_system_hello() {
+    msg=$1
+    echo "<--   system_hello"
+ }
 # 
 # void my_rsp_gap_set_scan_parameters(const ble_msg_gap_set_scan_parameters_rsp_t *msg) {
 #     Serial.print("<--\tgap_set_scan_parameters: { ");
@@ -244,4 +245,22 @@ main() {
 
 # here starts the execution
 main
+
+# test for callback function
+
+hello() {
+  echo "hello"
+}
+
+bye() {
+  echo "bye"
+}
+
+func=
+$func
+func=hello
+$func
+func=bye
+$func
+
 
