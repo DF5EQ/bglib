@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Bluegiga BGLib shell interface library demonstration sketch
 # 2013-03-14 by Jeff Rowberg <jeff@rowberg.net>
@@ -87,61 +87,62 @@
 #     bleSerialPort.begin(38400);
 # }
 # 
-# void loop() {
-#     Serial.println("Operations Menu:");
-#     Serial.println("0) Reset BLE112 module");
-#     Serial.println("1) Say hello to the BLE112 and wait for response");
-#     Serial.println("2) Toggle scanning for advertising BLE devices");
-#     Serial.println("Command?");
+main() {
+    local isScanActive=false
+
+    echo "Menu:"
+    echo "0) Reset BLE112 module"
+    echo "1) Say hello to the BLE112 and wait for response"
+    echo "2) Toggle scanning for advertising BLE devices"
+    echo "Command?"
 #     while (1) {
 #         // keep polling for new data from BLE
 #         ble112.checkActivity();
 # 
-#         // check for input from the user
+    # check for input from the user
 #         if (Serial.available()) {
-#             uint8_t ch = Serial.read();
-#             uint8_t status;
-#             if (ch == '0') {
-#                 // Reset BLE112 module
-#                 Serial.println("-->\tsystem_reset: { boot_in_dfu: 0 }");
-#                 ble112.ble_cmd_system_reset(0);
-#                 while ((status = ble112.checkActivity(1000)));
-#                 // system_reset doesn't have a response, but this BGLib
-#                 // implementation allows the system_boot event specially to
-#                 // set the "busy" flag to false for this particular case
-#             }
-#             if (ch == '1') {
-#                 // Say hello to the BLE112 and wait for response
-#                 Serial.println("-->\tsystem_hello");
-#                 ble112.ble_cmd_system_hello();
-#                 while ((status = ble112.checkActivity(1000)));
-#                 // response should come back within milliseconds
-#             }
-#             else if (ch == '2') {
-#                 // Toggle scanning for advertising BLE devices
-#                 if (isScanActive) {
-#                     isScanActive = 0;
-#                     Serial.println("-->\tgap_end_procedure");
-#                     ble112.ble_cmd_gap_end_procedure();
-#                     while ((status = ble112.checkActivity(1000)));
-#                     // response should come back within milliseconds
-#                 } else {
-#                     isScanActive = 1;
-#                     Serial.println("-->\tgap_set_scan_parameters: { scan_interval: 0xC8, scan_window: 0xC8, active: 1 }");
-#                     ble112.ble_cmd_gap_set_scan_parameters(0xC8, 0xC8, 1);
-#                     while ((status = ble112.checkActivity(1000)));
-#                     // response should come back within milliseconds
-#                     Serial.println("-->\tgap_discover: { mode: 2 (GENERIC) }");
-#                     ble112.ble_cmd_gap_discover(BGLIB_GAP_DISCOVER_GENERIC);
-#                     while ((status = ble112.checkActivity(1000)));
-#                     // response should come back within milliseconds
-#                     // scan response events may happen at any time after this
-#                 }
-#             }
-#         }
-#     }
-# }
-# 
+    while read -sn1 command; do
+        case $command in
+            "0") # Reset BLE112 module
+                 echo "-->   system_reset: { boot_in_dfu: 0 }"
+#                ble112.ble_cmd_system_reset(0);
+#                while ((status = ble112.checkActivity(1000)));
+                 # system_reset doesn't have a response, but this BGLib
+                 # implementation allows the system_boot event specially to
+                 # set the "busy" flag to false for this particular case
+                 ;;
+            "1") # Say hello to the BLE112 and wait for response
+                 echo "-->   system_hello"
+#                ble112.ble_cmd_system_hello();
+#                while ((status = ble112.checkActivity(1000)));
+                 # response should come back within milliseconds
+                 ;;
+            "2") # Toggle scanning for advertising BLE devices
+                 if $isScanActive; then
+                     isScanActive=false
+                     echo "-->   gap_end_procedure"
+#                    ble112.ble_cmd_gap_end_procedure();
+#                    while ((status = ble112.checkActivity(1000)));
+                     # response should come back within milliseconds
+                 else
+                     isScanActive=true
+                     echo "-->   gap_set_scan_parameters: { scan_interval: 0xC8, scan_window: 0xC8, active: 1 }"
+#                    ble112.ble_cmd_gap_set_scan_parameters(0xC8, 0xC8, 1);
+#                    while ((status = ble112.checkActivity(1000)));
+                     # response should come back within milliseconds
+                     echo "-->   gap_discover: { mode: 2 (GENERIC) }"
+#                    ble112.ble_cmd_gap_discover(BGLIB_GAP_DISCOVER_GENERIC);
+#                    while ((status = ble112.checkActivity(1000)));
+                     # response should come back within milliseconds
+                     # scan response events may happen at any time after this
+                 fi 
+                 ;;
+            "x") exit
+                 ;;
+        esac
+    done
+}
+
 # // ================================================================
 # // INTERNAL BGLIB CLASS CALLBACK FUNCTIONS
 # // ================================================================
@@ -243,3 +244,7 @@
 #     }
 #     Serial.println(" }");
 # }
+
+# here starts the execution
+main
+
