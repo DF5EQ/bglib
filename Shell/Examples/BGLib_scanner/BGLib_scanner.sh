@@ -1,16 +1,21 @@
-# // Bluegiga BGLib Arduino interface library demonstration sketch
-# // 2013-03-14 by Jeff Rowberg <jeff@rowberg.net>
-# // Updates should (hopefully) always be available at https://github.com/jrowberg/bglib
+#!/bin/sh
+
+# Bluegiga BGLib shell interface library demonstration sketch
+# 2013-03-14 by Jeff Rowberg <jeff@rowberg.net>
+# 2026-09-27 by Peter Bägel (DF5EQ) git@baegel.de
+# Updates should (hopefully) always be available at https://github.com/jrowberg/bglib
+#                                                or https://github.com/df5eq/bglib
+# Changelog:
+#   2026-09-27 - Port shell script
+#   2013-03-14 - Add support for packet mode
+#                Add support for BLE wake-up
+#   2012-11-14 - Initial release
 # 
-# // Changelog:
-# //      2013-03-14 - Add support for packet mode
-# //                   Add support for BLE wake-up
-# //      2012-11-14 - Initial release
-# 
-# /* ============================================
-# BGLib Arduino interface library code is placed under the MIT license
+# =============================================================================
+# BGLib shel interface library code is placed under the MIT license
 # Copyright (c) 2013 Jeff Rowberg
-# 
+# Copyright (c) 2026 Peter Bägel
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -28,33 +33,10 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-# ===============================================
-# */
+# =============================================================================
 # 
 # #include <SoftwareSerial.h>
 # #include "BGLib.h"
-# 
-# // BLE112 module connections:
-# // - BLE P0_4 -> Arduino Digital Pin 2 (BLE TX -> Arduino soft RX)
-# // - BLE P0_5 -> Arduino Digital Pin 3 (BLE RX -> Arduino soft TX)
-# //
-# // If using the *_hwake15 project firmware:
-# // - BLE P1_5 -> Arduino Digital Pin 4 (BLE host wake-up -> Arduino I/O 4)
-# //
-# // If useing the *_wake16 project firmware:
-# // - BLE P1_6 -> Arduino Digital Pin 5 (BLE module wake-up -> Arduino I/O 5)
-# //
-# // If using project with flow control enabled on the BLE:
-# // - BLE P0_2 -> GND (CTS tied to ground to bypass flow control)
-# 
-# // NOTE: this demo REQUIRES the BLE112 be programmed with the UART connected
-# // to the "api" endpoint in hardware.xml, have "mode" set to "packet", and be
-# // configured for 38400 baud, 8/N/1. This may change in the future, but be
-# // aware. The BLE SDK archive contains an /examples/uartdemo project which is
-# // a good starting point for this communication, though some changes are
-# // required to enable packet mode and change the baud rate. The BGLib
-# // repository also includes a project you can use for this in the folder
-# // /BLEFirmware/BGLib_U1A1P_38400_noflow_wake16_hwake15.
 # 
 # SoftwareSerial bleSerialPort(2, 3); // RX, TX
 # BGLib ble112((HardwareSerial *)&bleSerialPort, 0, 1);

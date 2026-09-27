@@ -1,19 +1,24 @@
-# // Bluegiga BGLib Arduino interface library config file
-# // 2014-02-12 by Jeff Rowberg <jeff@rowberg.net>
-# // Updates should (hopefully) always be available at https://github.com/jrowberg/bglib
+#!/bin/sh
+
+# Bluegiga BGLib shell interface library source file
+# 2014-02-12 by Jeff Rowberg <jeff@rowberg.net>
+# 2026-09-27 by Peter Bägel (DF5EQ) git@baegel.de
+# Updates should (hopefully) always be available at https://github.com/jrowberg/bglib
+#                                                or https://github.com/df5eq/bglib
+# Changelog:
+#   2026-09-27 - Port shell script
+#   2014-02-12 - Update to match SDK build 98
+#              - Fix major issue with uint8array commands
+#   2014-01-13 - Update to match SDK build 94
+#   2013-03-14 - Add support for packet mode
+#                Add support for BLE wake-up
+#                Fix serial data read routine to work properly
+#   2012-11-14 - Initial release
 # 
-# // Changelog:
-# //      2014-02-12 - Update to match SDK build 98
-# //                 - Fix major issue with uint8array commands
-# //      2014-01-13 - Update to match SDK build 94
-# //      2013-03-14 - Add support for packet mode
-# //                   Add support for BLE wake-up
-# //                   Fix serial data read routine to work properly
-# //      2012-11-14 - Initial release
-# 
-# /* ============================================
-# BGLib Arduino interface library code is placed under the MIT license
+# =============================================================================
+# BGLib shell interface library code is placed under the MIT license
 # Copyright (c) 2014 Jeff Rowberg
+# Copyright (c) 2026 Peter Bägel
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,8 +37,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-# ===============================================
-# */
+# =============================================================================
 # 
 # #ifndef __BGLIB_CONFIG_H__
 # #define __BGLIB_CONFIG_H__
