@@ -449,7 +449,7 @@
 # }
 # 
 BGLLib.checkActivity() {
-    timeout=$1
+    local timeout=$1
     echo "checkActivity - timeout=$timeout"
 #     uint16_t ch;
 #     while ((ch = uModule -> read()) < 256 && (timeout == 0 || millis() - timeoutStart < timeout)) {
@@ -1071,7 +1071,7 @@ BGLLib.checkActivity() {
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_RESET
 BGLLib.ble_cmd_system_reset () {
-      boot_in_dfu=$1
+      local boot_in_dfu=$1
       echo "ble_cmd_system_reset - boot_in_dfu=$boot_in_dfu"
 #     uint8_t d[1];
 #     memcpy(d + 0, &boot_in_dfu, sizeof(uint8));
@@ -1593,7 +1593,7 @@ BGLLib.ble_cmd_system_hello() {
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_GAP_DISCOVER
 BGLLib.ble_cmd_gap_discover() {
-    mode=$1
+    local mode=$1
     echo "ble_cmd_gap_discover - mode=$mode"
 #     uint8_t d[1];
 #     memcpy(d + 0, &mode, sizeof(uint8));
@@ -1644,9 +1644,9 @@ BGLLib.ble_cmd_gap_end_procedure() {
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_SCAN_PARAMETERS
 BGLLib.ble_cmd_gap_set_scan_parameters() {
-    scan_interval=$1
-    scan_window=$2
-    active=$3
+    local scan_interval=$1
+    local scan_window=$2
+    local active=$3
     echo "ble_cmd_gap_set_scan_parameters - scan_interval=$scan_interval - scan_window=$scan_window - active=$active"
 #     uint8_t d[5];
 #     memcpy(d + 0, &scan_interval, sizeof(uint16));
