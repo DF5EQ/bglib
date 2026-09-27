@@ -94,14 +94,14 @@ main() {
     echo "Command?"
     while true; do
         # keep polling for new data from BLE
-        BGLLib.checkActivity
+        BGLib_checkActivity
 # 
         # check for input from the user
         while read -s -t1 -n1 command; do
             case $command in
                 "0") # Reset BLE112 module
                      echo "-->   system_reset: { boot_in_dfu: 0 }"
-                     BGLLib.ble_cmd_system_reset 0
+                     BGLib_ble_cmd_system_reset 0
 #                    while ((status = ble112.checkActivity(1000)));
                      # system_reset doesn't have a response, but this BGLib
                      # implementation allows the system_boot event specially to
@@ -109,7 +109,7 @@ main() {
                      ;;
                 "1") # Say hello to the BLE112 and wait for response
                      echo "-->   system_hello"
-                     BGLLib.ble_cmd_system_hello
+                     BGLib_ble_cmd_system_hello
 #                    while ((status = ble112.checkActivity(1000)));
                      # response should come back within milliseconds
                      ;;
@@ -117,17 +117,17 @@ main() {
                      if $isScanActive; then
                          isScanActive=false
                          echo "-->   gap_end_procedure"
-                         BGLLib.ble_cmd_gap_end_procedure
+                         BGLib_ble_cmd_gap_end_procedure
 #                        while ((status = ble112.checkActivity(1000)));
                          # response should come back within milliseconds
                      else
                          isScanActive=true
                          echo "-->   gap_set_scan_parameters: { scan_interval: 0xC8, scan_window: 0xC8, active: 1 }"
-                         BGLLib.ble_cmd_gap_set_scan_parameters 0xC8 0xC8 1
+                         BGLib_ble_cmd_gap_set_scan_parameters 0xC8 0xC8 1
 #                        while ((status = ble112.checkActivity(1000)));
                          # response should come back within milliseconds
                          echo "-->   gap_discover: { mode: 2 (GENERIC) }"
-                         BGLLib.ble_cmd_gap_discover $BGLIB_GAP_DISCOVER_GENERIC
+                         BGLib_ble_cmd_gap_discover $BGLIB_GAP_DISCOVER_GENERIC
 #                        while ((status = ble112.checkActivity(1000)));
                          # response should come back within milliseconds
                          # scan response events may happen at any time after this
