@@ -129,7 +129,7 @@ void my_evt_gap_scan_response(const struct ble_msg_gap_scan_response_evt_t* msg)
     for (uint8_t i = 0; i < msg->data.len; i++) {
         printf("%02x ", msg->data.data[i]);
     }
-    printf(" }");
+    printf(" }\n");
 }
 
 /*========== public functions ===============================================*/
