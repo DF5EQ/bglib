@@ -1072,11 +1072,9 @@ BGLib_sendCommand() {
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_RESET
 BGLib_ble_cmd_system_reset () {
-      local boot_in_dfu=$1
-      echo "ble_cmd_system_reset - boot_in_dfu=$boot_in_dfu"
-#     uint8_t d[1];
-#     memcpy(d + 0, &boot_in_dfu, sizeof(uint8));
-#     return sendCommand(1, 0, 0, d);
+    local boot_in_dfu=$1
+    echo "ble_cmd_system_reset - boot_in_dfu=$boot_in_dfu"
+    BGLib_sendCommand 1 0 0 $boot_in_dfu
 }
 # #endif
 # 
