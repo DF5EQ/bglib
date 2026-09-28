@@ -1039,7 +1039,7 @@ $BGLib_ble_rsp_system_hello
 # 
 #     return 0; // parsed successfully
 }
-# 
+ 
 BGLib_sendCommand() {
     local len=$1
     local commandClass=$2
@@ -1051,7 +1051,6 @@ BGLib_sendCommand() {
 
 #     lastCommand[0] = commandClass;
 #     lastCommand[1] = commandId;
-#     if (len > 0) memcpy(bgapiTXBuffer + 4, payload, len);
 
 #     if (onBeforeTXCommand) onBeforeTXCommand();
 #     setBusy(true);
@@ -1067,9 +1066,8 @@ BGLib_sendCommand() {
     done  > /dev/ttyACM0
 
 #     if (onTXCommandComplete) onTXCommandComplete();
-#     return 0;
 }
-# 
+ 
 # #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_RESET
 BGLib_ble_cmd_system_reset () {
     local boot_in_dfu=$1
@@ -1077,14 +1075,14 @@ BGLib_ble_cmd_system_reset () {
     BGLib_sendCommand 1 0 0 $boot_in_dfu
 }
 # #endif
-# 
+
 # #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_HELLO
 BGLib_ble_cmd_system_hello() {
     echo "ble_cmd_system_hello"
     BGLib_sendCommand 0 0 1
 }
 # #endif
-# 
+ 
 # #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ADDRESS_GET
 # uint8_t BGLib::ble_cmd_system_address_get() {
 #     return sendCommand(0, 0, 2);
