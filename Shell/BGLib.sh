@@ -1041,43 +1041,29 @@ $BGLib_ble_rsp_system_hello
 }
 # 
 BGLib_sendCommand() {
-    len=$1
-    commandClass=$2
-    commandID=$3
-    payload=$4
+    local len=$1
+    local commandClass=$2
+    local commandID=$3
+    local payload=$4
+    local TXBuffer #="0 $*"
 
-# send command to serial port
-echo -ne "\x00\x$len\x$commandClass\x$commandID" > /dev/ttyACM0
+    TXBuffer="0 $((len%256)) $commandClass $commandID $payload"
 
-#     bgapiTXBuffer = (uint8_t *)malloc(len + 4);
-#     bgapiTXBuffer[0] = 0x00;
-#     bgapiTXBuffer[1] = (len & 0xFF);
-#     bgapiTXBuffer[2] = commandClass;
-#     bgapiTXBuffer[3] = commandId;
 #     lastCommand[0] = commandClass;
 #     lastCommand[1] = commandId;
 #     if (len > 0) memcpy(bgapiTXBuffer + 4, payload, len);
-#     #ifdef DEBUG
-#         Serial.print("\n=>[ ");
-#         if (packetMode) {
-#             if (len + 4 < 16) Serial.write(0x30);
-#             Serial.print(len + 4, HEX);
-#             Serial.write(0x20);
-#         }
-#         for (uint8_t i = 0; i < len + 4; i++) {
-#             if (bgapiTXBuffer[i] < 16) Serial.write(0x30);
-#             Serial.print(bgapiTXBuffer[i], HEX);
-#             Serial.write(0x20);
-#         }
-#         Serial.println("]");
-#     #endif
+
 #     if (onBeforeTXCommand) onBeforeTXCommand();
 #     setBusy(true);
 #     if (packetMode) uModule -> write(len + 4); // outgoing packet length byte first
 #     uModule -> write(bgapiTXBuffer, len + 4);
-# 
+
+    # send command to serial port
+    for byte in $TXBuffer; do 
+      echo -ne "\x$byte"
+    done  > /dev/ttyACM0
+
 #     if (onTXCommandComplete) onTXCommandComplete();
-#     free(bgapiTXBuffer);
 #     return 0;
 }
 # 
