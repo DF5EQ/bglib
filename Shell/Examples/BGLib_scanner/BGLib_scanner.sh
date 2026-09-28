@@ -58,6 +58,7 @@ setup() {
     # set up BGLib response handlers (called almost immediately after sending commands)
 #     // (these are also technicaly optional)
     BGLib_ble_rsp_system_hello=my_rsp_system_hello
+    BGLib_ble_rsp_system_info=my_rsp_system_info
 #     ble112.ble_rsp_gap_set_scan_parameters = my_rsp_gap_set_scan_parameters;
 #     ble112.ble_rsp_gap_discover = my_rsp_gap_discover;
 #     ble112.ble_rsp_gap_end_procedure = my_rsp_gap_end_procedure;
@@ -77,6 +78,7 @@ main() {
     echo "0) Reset BLE112 module"
     echo "1) Say hello to the BLE112 and wait for response"
     echo "2) Toggle scanning for advertising BLE devices"
+    echo "3) Get system info"
     echo "Command?"
     while true; do
         # keep polling for new data from BLE
@@ -118,6 +120,12 @@ main() {
                          # response should come back within milliseconds
                          # scan response events may happen at any time after this
                      fi 
+                     ;;
+                "3") # Get system info
+                     echo "-->   system_info"
+                     BGLib_ble_cmd_system_get_info
+#                    while ((status = ble112.checkActivity(1000)));
+                     # response should come back within milliseconds
                      ;;
                 "x") exit
                      ;;
@@ -173,6 +181,12 @@ my_rsp_system_hello() {
     msg=$1
     echo "<--   system_hello"
  }
+
+my_rsp_system_info() {
+    msg=$1
+    echo "<--   system_info"
+ }
+
 # 
 # void my_rsp_gap_set_scan_parameters(const ble_msg_gap_set_scan_parameters_rsp_t *msg) {
 #     Serial.print("<--\tgap_set_scan_parameters: { ");

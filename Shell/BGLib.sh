@@ -85,6 +85,7 @@ BGLIB_ble_rsp_system_hello=
 #     #endif
 #     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_GET_INFO
 #         ble_rsp_system_get_info = 0;
+BGLib_ble_rsp_system_get_info=0
 #     #endif
 #     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_TX
 #         ble_rsp_system_endpoint_tx = 0;
@@ -1128,9 +1129,9 @@ BGLib_ble_cmd_system_hello() {
 # #endif
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_GET_INFO
-# uint8_t BGLib::ble_cmd_system_get_info() {
-#     return sendCommand(0, 0, 8);
-# }
+BGLib_ble_cmd_system_get_info() {
+    BGLib_sendCommand 0 0 8
+}
 # #endif
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_TX
