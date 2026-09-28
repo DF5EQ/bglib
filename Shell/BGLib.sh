@@ -85,7 +85,7 @@ BGLIB_ble_rsp_system_hello=
 #     #endif
 #     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_GET_INFO
 #         ble_rsp_system_get_info = 0;
-BGLib_ble_rsp_system_get_info=0
+BGLib_ble_rsp_system_get_info=
 #     #endif
 #     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_TX
 #         ble_rsp_system_endpoint_tx = 0;
@@ -606,6 +606,7 @@ $BGLib_ble_rsp_system_hello
 #                     #endif
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_GET_INFO
 #                         else if (bgapiRXBuffer[3] == 8) { if (ble_rsp_system_get_info) ble_rsp_system_get_info((const struct ble_msg_system_get_info_rsp_t *)(bgapiRXBuffer + 4)); }
+$BGLib_ble_rsp_system_info
 #                     #endif
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_TX
 #                         else if (bgapiRXBuffer[3] == 9) { if (ble_rsp_system_endpoint_tx) ble_rsp_system_endpoint_tx((const struct ble_msg_system_endpoint_tx_rsp_t *)(bgapiRXBuffer + 4)); }
