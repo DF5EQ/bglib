@@ -1040,7 +1040,15 @@ $BGLib_ble_rsp_system_hello
 #     return 0; // parsed successfully
 }
 # 
-# uint8_t BGLib::sendCommand(uint16_t len, uint8_t commandClass, uint8_t commandId, void *payload) {
+BGLib_sendCommand() {
+    len=$1
+    commandClass=$2
+    commandID=$3
+    payload=$4
+
+# send command to serial port
+echo -ne "\x00\x$len\x$commandClass\x$commandID" > /dev/ttyACM0
+
 #     bgapiTXBuffer = (uint8_t *)malloc(len + 4);
 #     bgapiTXBuffer[0] = 0x00;
 #     bgapiTXBuffer[1] = (len & 0xFF);
@@ -1071,7 +1079,7 @@ $BGLib_ble_rsp_system_hello
 #     if (onTXCommandComplete) onTXCommandComplete();
 #     free(bgapiTXBuffer);
 #     return 0;
-# }
+}
 # 
 # #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_RESET
 BGLib_ble_cmd_system_reset () {
@@ -1086,7 +1094,7 @@ BGLib_ble_cmd_system_reset () {
 # #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_HELLO
 BGLib_ble_cmd_system_hello() {
     echo "ble_cmd_system_hello"
-#     return sendCommand(0, 0, 1);
+    BGLib_sendCommand 0 0 1
 }
 # #endif
 # 
