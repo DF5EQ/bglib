@@ -1909,7 +1909,7 @@ readonly BGLIB_GAP_DISCOVER_GENERIC=1
 #         HardwareSerial *uOutput; // optional UART object for host/debug connection
 # 
 #         bool busy;
-#         uint8_t packetMode;
+    BGLib_packetMode=false
 #         uint8_t lastCommand[2];
 #         uint8_t lastResponse[2];
 #         uint8_t lastEvent[2];

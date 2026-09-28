@@ -1055,8 +1055,11 @@ BGLib_sendCommand() {
 
 #     if (onBeforeTXCommand) onBeforeTXCommand();
 #     setBusy(true);
-#     if (packetMode) uModule -> write(len + 4); // outgoing packet length byte first
-#     uModule -> write(bgapiTXBuffer, len + 4);
+
+    # outgoing packet length byte first
+    if [ "$BGLib_packetMode" = "true" ]; then
+        echo -ne "\x$((len + 4))" > /dev/ttyACM0
+    fi
 
     # send command to serial port
     for byte in $TXBuffer; do 
