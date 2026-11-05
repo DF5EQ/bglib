@@ -453,14 +453,13 @@ BGLib_ble_rsp_system_get_info=
 BGLib_checkActivity() {
     local timeout=$1
     local ch
-    echo "checkActivity - timeout=$timeout"
+    echo "checkActivity: timeout=$timeout"
 #     while ((ch = uModule -> read()) < 256 && (timeout == 0 || millis() - timeoutStart < timeout)) {
     while
         ch=$(dd bs=1 count=1 if=/dev/ttyACM0 2>/dev/null | od -An -tu1 | tr -d ' \n')
         [ "$ch" != "" ]
     do
-        echo "ch=$ch"
-#        BGLib_parse $ch
+        BGLib_parse $ch
     done
 #         if (timeout > 0) timeoutStart = millis();
 #     }
@@ -516,6 +515,8 @@ BGLib_checkActivity() {
 BGLib_parse() {
     ch=$1
     packetMode=$2
+
+    echo "BGLib_parse: ch=$ch packetMode=$packetMode"
 #     #ifdef DEBUG
 #         // DEBUG: output hex value of incoming character
 #         if (ch < 16) Serial.write(0x30);    // leading '0'
