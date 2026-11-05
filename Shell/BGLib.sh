@@ -452,10 +452,16 @@ BGLib_ble_rsp_system_get_info=
 # 
 BGLib_checkActivity() {
     local timeout=$1
+    local ch
     echo "checkActivity - timeout=$timeout"
-#     uint16_t ch;
 #     while ((ch = uModule -> read()) < 256 && (timeout == 0 || millis() - timeoutStart < timeout)) {
-          BGLib_parse $ch
+    while
+        ch=$(dd bs=1 count=1 if=/dev/ttyACM0 2>/dev/null | od -An -tu1 | tr -d ' \n')
+        [ "$ch" != "" ]
+    do
+        echo "ch=$ch"
+#        BGLib_parse $ch
+    done
 #         if (timeout > 0) timeoutStart = millis();
 #     }
 #     if (timeout > 0 && busy && millis() - timeoutStart >= timeout) {

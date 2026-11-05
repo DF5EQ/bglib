@@ -68,7 +68,8 @@ setup() {
 #     ble112.ble_evt_gap_scan_response = my_evt_gap_scan_response;
 # 
     # configure the serial port
-    stty -F $SERIAL_PORT 9600 raw -echo
+    exec 3<>$SERIAL_PORT #open file descriptor
+    stty -F $SERIAL_PORT 9600 raw -echo min 0 time 1
 }
 
 main() {
