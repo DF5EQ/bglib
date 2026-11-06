@@ -567,8 +567,9 @@ BGLib_parse() {
                 lastResponse_0=$bgapiRXBuffer_2
                 lastResponse_1=$bgapiRXBuffer_3
                 echo $lastResponse_0 $lastResponse_1
-# 
-#                 if (bgapiRXBuffer[2] == 0) {
+
+                if [ $bgapiRXBuffer_2 == 0 ]; then
+                    echo "class: 0"
 #                     if (false) { }
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_RESET
 #                         else if (bgapiRXBuffer[3] == 0) { if (ble_rsp_system_reset) ble_rsp_system_reset((const struct ble_msg_system_reset_rsp_t *)(bgapiRXBuffer + 4)); }
@@ -618,7 +619,8 @@ $BGLib_ble_rsp_system_info
 #                         else if (bgapiRXBuffer[3] == 14) { if (ble_rsp_system_endpoint_set_watermarks) ble_rsp_system_endpoint_set_watermarks((const struct ble_msg_system_endpoint_set_watermarks_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
 #                 }
-#                 else if (bgapiRXBuffer[2] == 1) {
+                elif [ $bgapiRXBuffer_2 == 1 ]; then
+                    echo "class: 1"
 #                     if (false) { }
 #                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_DEFRAG
 #                         else if (bgapiRXBuffer[3] == 0) { if (ble_rsp_flash_ps_defrag) ble_rsp_flash_ps_defrag((const struct ble_msg_flash_ps_defrag_rsp_t *)(bgapiRXBuffer + 4)); }
@@ -648,7 +650,8 @@ $BGLib_ble_rsp_system_info
 #                         else if (bgapiRXBuffer[3] == 8) { if (ble_rsp_flash_read_data) ble_rsp_flash_read_data((const struct ble_msg_flash_read_data_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
 #                 }
-#                 else if (bgapiRXBuffer[2] == 2) {
+                elif [ $bgapiRXBuffer_2 == 2 ]; then
+                    echo "class: 2"
 #                     if (false) { }
 #                     #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_WRITE
 #                         else if (bgapiRXBuffer[3] == 0) { if (ble_rsp_attributes_write) ble_rsp_attributes_write((const struct ble_msg_attributes_write_rsp_t *)(bgapiRXBuffer + 4)); }
@@ -666,7 +669,8 @@ $BGLib_ble_rsp_system_info
 #                         else if (bgapiRXBuffer[3] == 4) { if (ble_rsp_attributes_user_write_response) ble_rsp_attributes_user_write_response((const struct ble_msg_attributes_user_write_response_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
 #                 }
-#                 else if (bgapiRXBuffer[2] == 3) {
+                elif [ $bgapiRXBuffer_2 == 3 ]; then
+                    echo "class: 3"
 #                     if (false) { }
 #                     #ifdef BGLIB_ENABLE_COMMAND_CONNECTION_DISCONNECT
 #                         else if (bgapiRXBuffer[3] == 0) { if (ble_rsp_connection_disconnect) ble_rsp_connection_disconnect((const struct ble_msg_connection_disconnect_rsp_t *)(bgapiRXBuffer + 4)); }
@@ -696,7 +700,8 @@ $BGLib_ble_rsp_system_info
 #                         else if (bgapiRXBuffer[3] == 8) { if (ble_rsp_connection_raw_tx) ble_rsp_connection_raw_tx((const struct ble_msg_connection_raw_tx_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
 #                 }
-#                 else if (bgapiRXBuffer[2] == 4) {
+                elif [ $bgapiRXBuffer_2 == 4 ]; then
+                    echo "class: 4"
 #                     if (false) { }
 #                     #ifdef BGLIB_ENABLE_COMMAND_ATTCLIENT_FIND_BY_TYPE_VALUE
 #                         else if (bgapiRXBuffer[3] == 0) { if (ble_rsp_attclient_find_by_type_value) ble_rsp_attclient_find_by_type_value((const struct ble_msg_attclient_find_by_type_value_rsp_t *)(bgapiRXBuffer + 4)); }
@@ -735,7 +740,8 @@ $BGLib_ble_rsp_system_info
 #                         else if (bgapiRXBuffer[3] == 11) { if (ble_rsp_attclient_read_multiple) ble_rsp_attclient_read_multiple((const struct ble_msg_attclient_read_multiple_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
 #                 }
-#                 else if (bgapiRXBuffer[2] == 5) {
+                elif [ $bgapiRXBuffer_2 == 5 ]; then
+                    echo "class: 5"
 #                     if (false) { }
 #                     #ifdef BGLIB_ENABLE_COMMAND_SM_ENCRYPT_START
 #                         else if (bgapiRXBuffer[3] == 0) { if (ble_rsp_sm_encrypt_start) ble_rsp_sm_encrypt_start((const struct ble_msg_sm_encrypt_start_rsp_t *)(bgapiRXBuffer + 4)); }
@@ -759,7 +765,8 @@ $BGLib_ble_rsp_system_info
 #                         else if (bgapiRXBuffer[3] == 6) { if (ble_rsp_sm_set_oob_data) ble_rsp_sm_set_oob_data((const struct ble_msg_sm_set_oob_data_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
 #                 }
-#                 else if (bgapiRXBuffer[2] == 6) {
+                elif [ $bgapiRXBuffer_2 == 6 ]; then
+                    echo "class: 6"
 #                     if (false) { }
 #                     #ifdef BGLIB_ENABLE_COMMAND_GAP_SET_PRIVACY_FLAGS
 #                         else if (bgapiRXBuffer[3] == 0) { if (ble_rsp_gap_set_privacy_flags) ble_rsp_gap_set_privacy_flags((const struct ble_msg_gap_set_privacy_flags_rsp_t *)(bgapiRXBuffer + 4)); }
@@ -795,7 +802,8 @@ $BGLib_ble_rsp_system_info
 #                         else if (bgapiRXBuffer[3] == 10) { if (ble_rsp_gap_set_directed_connectable_mode) ble_rsp_gap_set_directed_connectable_mode((const struct ble_msg_gap_set_directed_connectable_mode_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
 #                 }
-#                 else if (bgapiRXBuffer[2] == 7) {
+                elif [ $bgapiRXBuffer_2 == 7 ]; then
+                    echo "class: 7"
 #                     if (false) { }
 #                     #ifdef BGLIB_ENABLE_COMMAND_HARDWARE_IO_PORT_CONFIG_IRQ
 #                         else if (bgapiRXBuffer[3] == 0) { if (ble_rsp_hardware_io_port_config_irq) ble_rsp_hardware_io_port_config_irq((const struct ble_msg_hardware_io_port_config_irq_rsp_t *)(bgapiRXBuffer + 4)); }
@@ -846,7 +854,8 @@ $BGLib_ble_rsp_system_info
 #                         else if (bgapiRXBuffer[3] == 15) { if (ble_rsp_hardware_io_port_irq_direction) ble_rsp_hardware_io_port_irq_direction((const struct ble_msg_hardware_io_port_irq_direction_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
 #                 }
-#                 else if (bgapiRXBuffer[2] == 8) {
+                elif [ $bgapiRXBuffer_2 == 8 ]; then
+                    echo "class: 8"
 #                     if (false) { }
 #                     #ifdef BGLIB_ENABLE_COMMAND_TEST_PHY_TX
 #                         else if (bgapiRXBuffer[3] == 0) { if (ble_rsp_test_phy_tx) ble_rsp_test_phy_tx((const struct ble_msg_test_phy_tx_rsp_t *)(bgapiRXBuffer + 4)); }
@@ -870,7 +879,8 @@ $BGLib_ble_rsp_system_info
 #                         else if (bgapiRXBuffer[3] == 6) { if (ble_rsp_test_channel_mode) ble_rsp_test_channel_mode((const struct ble_msg_test_channel_mode_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
 #                 }
-#                 else if (bgapiRXBuffer[2] == 9) {
+                elif [ $bgapiRXBuffer_2 == 9 ]; then
+                    echo "class: 9"
 #                     if (false) { }
 #                     #ifdef BGLIB_ENABLE_COMMAND_DFU_RESET
 #                         else if (bgapiRXBuffer[3] == 0) { if (ble_rsp_dfu_reset) ble_rsp_dfu_reset((const struct ble_msg_dfu_reset_rsp_t *)(bgapiRXBuffer + 4)); }
@@ -885,6 +895,7 @@ $BGLib_ble_rsp_system_info
 #                         else if (bgapiRXBuffer[3] == 3) { if (ble_rsp_dfu_flash_upload_finish) ble_rsp_dfu_flash_upload_finish((const struct ble_msg_dfu_flash_upload_finish_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
 #                 }
+                fi
 # 
 #                 setBusy(false);
 #             } else {
