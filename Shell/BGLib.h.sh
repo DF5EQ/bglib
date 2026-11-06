@@ -1893,7 +1893,7 @@ readonly BGLIB_GAP_DISCOVER_GENERIC=1
 #         uint8_t *bgapiRXBuffer;
 #         uint8_t bgapiRXBufferSize;
 #         uint8_t bgapiRXBufferPos;
-#         uint16_t bgapiRXDataLen;
+    bgapiRXDataLen=0
 # 
 #         // outgoing package buffer vars
 #         uint8_t *bgapiTXBuffer;

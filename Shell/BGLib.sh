@@ -516,7 +516,6 @@ BGLib_parse() {
     local ch=$1
     local packetMode=$2
 
-    echo "BGLib_parse: ch=$ch packetMode=$packetMode"
 #     if (bgapiRXBufferPos == bgapiRXBufferSize) {
 #         // expand RX buffer to prevent overflow
 #         bgapiRXBuffer = (uint8_t *)realloc(bgapiRXBuffer, bgapiRXBufferSize += 16);
@@ -533,7 +532,6 @@ BGLib_parse() {
     #     Bytes 4-n:  0 - 2048 Bytes, Payload (PL)     Up to 2048 bytes of payload
 
     # check packet position
-    echo "bgapiRXBufferPos=$bgapiRXBufferPos"
     if [ $bgapiRXBufferPos == 0 ]; then
         # beginning of packet, check for correct framing/expected byte(s)
         # BGAPI packet for Bluetooth Smart Single Mode must be either Command/Response (0x00) or Event (0x80)
@@ -545,27 +543,26 @@ BGLib_parse() {
             return 1 # packet format error
         fi
     else
-    # middle of packet, assume we're okay
-#         bgapiRXBuffer[bgapiRXBufferPos++] = ch;
-#         if (bgapiRXBufferPos == 2) {
-#             // just received "Length Low" byte, so store expected packet length
-#             bgapiRXDataLen = ch + ((bgapiRXBuffer[0] & 0x03) << 8);
-#         } else if (bgapiRXBufferPos == bgapiRXDataLen + 4) {
-#             // just received last expected byte
-#             #ifdef DEBUG
-#                 Serial.print("\n<=[ ");
-#                 for (uint8_t i = 0; i < bgapiRXBufferPos; i++) {
-#                     if (bgapiRXBuffer[i] < 16) Serial.write(0x30);
-#                     Serial.print(bgapiRXBuffer[i], HEX);
-#                     Serial.write(0x20);
-#                 }
-#                 Serial.println("]");
-#             #endif
-# 
-#             // reset RX packet buffer position to be ready for new packet
-#             bgapiRXBufferPos = 0;
-# 
-#             // check packet type
+        # middle of packet, assume we're okay
+        eval bgapiRXBuffer_$bgapiRXBufferPos=$ch
+            bgapiRXBufferPos=$(($bgapiRXBufferPos+1))
+        if [ $bgapiRXBufferPos == 2 ]; then
+            # just received "Length Low" byte, so store expected packet length
+            bgapiRXDataLen=$(($bgapiRXBuffer_0 % 4 * 256 + $ch));
+        elif [ $bgapiRXBufferPos == $(($bgapiRXDataLen + 4)) ]; then
+            # just received last expected byte
+            echo -ne "received bytes: "
+            for i in $(seq -s" " 0 $bgapiRXBufferMax); do
+                eval echo -ne \"\$bgapiRXBuffer_$i \"
+            done
+            echo
+            # reset RX packet buffer and packet buffer position to be ready for new packet
+            for i in $(seq -s" " 0 $bgapiRXBufferMax); do
+                eval bgapiRXBuffer_$i=""
+            done
+            bgapiRXBufferPos=0
+ 
+            # check packet type
 #             if ((bgapiRXBuffer[0] & 0x80) == 0) {
 #                 // 0x00 = Response packet
 # 
@@ -1032,7 +1029,7 @@ $BGLib_ble_rsp_system_info
 #                     #endif
 #                 }
 #             }
-#         }
+        fi
     fi
 # 
     return 0 # parsed successfully
