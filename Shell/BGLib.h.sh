@@ -1893,7 +1893,7 @@ readonly BGLIB_GAP_DISCOVER_GENERIC=1
 #         uint8_t *bgapiRXBuffer;
 #         uint8_t bgapiRXBufferSize;
 #         uint8_t bgapiRXBufferPos;
-    bgapiRXDataLen=0
+    bgapiRXDataLen=
 # 
 #         // outgoing package buffer vars
 #         uint8_t *bgapiTXBuffer;
@@ -1911,8 +1911,10 @@ readonly BGLIB_GAP_DISCOVER_GENERIC=1
 #         bool busy;
     BGLib_packetMode=false
 #         uint8_t lastCommand[2];
-#         uint8_t lastResponse[2];
-#         uint8_t lastEvent[2];
+    lastResponse_0=
+    lastResponse_1=
+    lastEvent_0=
+    lastEvent_1=
 #         uint32_t timeoutStart;
 #         bool lastError;
 #         bool lastTimeout;

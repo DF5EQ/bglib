@@ -552,23 +552,21 @@ BGLib_parse() {
         elif [ $bgapiRXBufferPos == $(($bgapiRXDataLen + 4)) ]; then
             # just received last expected byte
             echo -ne "received bytes: "
-            for i in $(seq -s" " 0 $bgapiRXBufferMax); do
+            for i in $(seq -s" " 0 $(($bgapiRXBufferPos - 1))); do
                 eval echo -ne \"\$bgapiRXBuffer_$i \"
             done
             echo
-            # reset RX packet buffer and packet buffer position to be ready for new packet
-            for i in $(seq -s" " 0 $bgapiRXBufferMax); do
-                eval bgapiRXBuffer_$i=""
-            done
+            # reset RX packet buffer position to be ready for new packet
             bgapiRXBufferPos=0
  
             # check packet type
-#             if ((bgapiRXBuffer[0] & 0x80) == 0) {
-#                 // 0x00 = Response packet
-# 
-#                 // capture last response class/command bytes
-#                 lastResponse[0] = bgapiRXBuffer[2];
-#                 lastResponse[1] = bgapiRXBuffer[3];
+            if [ $(($bgapiRXBuffer_0 & 0x80)) == 0 ]; then
+                # 0x00 = Response packet
+                echo -ne "Response packet: "
+                # capture last response class/command bytes
+                lastResponse_0=$bgapiRXBuffer_2
+                lastResponse_1=$bgapiRXBuffer_3
+                echo $lastResponse_0 $lastResponse_1
 # 
 #                 if (bgapiRXBuffer[2] == 0) {
 #                     if (false) { }
@@ -890,11 +888,13 @@ $BGLib_ble_rsp_system_info
 # 
 #                 setBusy(false);
 #             } else {
-#                 // 0x80 = Event packet
-# 
-#                 // capture last event class/command bytes
-#                 lastEvent[0] = bgapiRXBuffer[2];
-#                 lastEvent[1] = bgapiRXBuffer[3];
+            else
+                # 0x80 = Event packet
+                echo -ne "Event packet: "
+                # capture last event class/command bytes
+                lastEvent_0=$bgapiRXBuffer_2
+                lastEvent_1=$bgapiRXBuffer_3
+                echo $lastEvent_0 $lastEvent_1
 # 
 #                 if (bgapiRXBuffer[2] == 0) {
 #                     if (false) { }
@@ -1028,7 +1028,7 @@ $BGLib_ble_rsp_system_info
 #                         else if (bgapiRXBuffer[3] == 0) { if (ble_evt_dfu_boot) ble_evt_dfu_boot((const struct ble_msg_dfu_boot_evt_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
 #                 }
-#             }
+            fi
         fi
     fi
 # 
