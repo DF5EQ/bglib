@@ -548,7 +548,7 @@ BGLib_parse() {
             bgapiRXBufferPos=$(($bgapiRXBufferPos+1))
         if [ $bgapiRXBufferPos == 2 ]; then
             # just received "Length Low" byte, so store expected packet length
-            bgapiRXDataLen=$(($bgapiRXBuffer_0 % 4 * 256 + $ch));
+            bgapiRXDataLen=$(( (($bgapiRXBuffer_0 & 0x03) << 8) + $ch ))
         elif [ $bgapiRXBufferPos == $(($bgapiRXDataLen + 4)) ]; then
             # just received last expected byte
             echo -ne "received bytes: "
