@@ -571,54 +571,87 @@ BGLib_parse() {
                 if [ $bgapiRXBuffer_2 == 0 ]; then
                     echo "class: 0"
 #                     if (false) { }
+                        if false; then
+                            :
+                        elif [ $bgapiRXBuffer_3 == 0 ]; then
+                            echo "command: 0"
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_RESET
 #                         else if (bgapiRXBuffer[3] == 0) { if (ble_rsp_system_reset) ble_rsp_system_reset((const struct ble_msg_system_reset_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 1 ]; then
+                            echo "command: 1"
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_HELLO
 #                         else if (bgapiRXBuffer[3] == 1) { if (ble_rsp_system_hello) ble_rsp_system_hello((const struct ble_msg_system_hello_rsp_t *)(bgapiRXBuffer + 4)); }
-$BGLib_ble_rsp_system_hello
 #                     #endif
+                            $BGLib_ble_rsp_system_hello
+                        elif [ $bgapiRXBuffer_3 == 2 ]; then
+                            echo "command: 2"
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ADDRESS_GET
 #                         else if (bgapiRXBuffer[3] == 2) { if (ble_rsp_system_address_get) ble_rsp_system_address_get((const struct ble_msg_system_address_get_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 3 ]; then
+                            echo "command: 3"
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_REG_WRITE
 #                         else if (bgapiRXBuffer[3] == 3) { if (ble_rsp_system_reg_write) ble_rsp_system_reg_write((const struct ble_msg_system_reg_write_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 4 ]; then
+                            echo "command: 4"
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_REG_READ
 #                         else if (bgapiRXBuffer[3] == 4) { if (ble_rsp_system_reg_read) ble_rsp_system_reg_read((const struct ble_msg_system_reg_read_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 5 ]; then
+                            echo "command: 5"
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_GET_COUNTERS
 #                         else if (bgapiRXBuffer[3] == 5) { if (ble_rsp_system_get_counters) ble_rsp_system_get_counters((const struct ble_msg_system_get_counters_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 6 ]; then
+                            echo "command: 6"
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_GET_CONNECTIONS
 #                         else if (bgapiRXBuffer[3] == 6) { if (ble_rsp_system_get_connections) ble_rsp_system_get_connections((const struct ble_msg_system_get_connections_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 7 ]; then
+                            echo "command: 7"
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_READ_MEMORY
 #                         else if (bgapiRXBuffer[3] == 7) { if (ble_rsp_system_read_memory) ble_rsp_system_read_memory((const struct ble_msg_system_read_memory_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 8 ]; then
+                            echo "command: 8"
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_GET_INFO
 #                         else if (bgapiRXBuffer[3] == 8) { if (ble_rsp_system_get_info) ble_rsp_system_get_info((const struct ble_msg_system_get_info_rsp_t *)(bgapiRXBuffer + 4)); }
-$BGLib_ble_rsp_system_info
+                            $BGLib_ble_rsp_system_info
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 9 ]; then
+                            echo "command: 9"
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_TX
 #                         else if (bgapiRXBuffer[3] == 9) { if (ble_rsp_system_endpoint_tx) ble_rsp_system_endpoint_tx((const struct ble_msg_system_endpoint_tx_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 10 ]; then
+                            echo "command: 10"
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_WHITELIST_APPEND
 #                         else if (bgapiRXBuffer[3] == 10) { if (ble_rsp_system_whitelist_append) ble_rsp_system_whitelist_append((const struct ble_msg_system_whitelist_append_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 11 ]; then
+                            echo "command: 11"
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_WHITELIST_REMOVE
 #                         else if (bgapiRXBuffer[3] == 11) { if (ble_rsp_system_whitelist_remove) ble_rsp_system_whitelist_remove((const struct ble_msg_system_whitelist_remove_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 12 ]; then
+                            echo "command: 12"
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_WHITELIST_CLEAR
 #                         else if (bgapiRXBuffer[3] == 12) { if (ble_rsp_system_whitelist_clear) ble_rsp_system_whitelist_clear((const struct ble_msg_system_whitelist_clear_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 13 ]; then
+                            echo "command: 13"
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_RX
 #                         else if (bgapiRXBuffer[3] == 13) { if (ble_rsp_system_endpoint_rx) ble_rsp_system_endpoint_rx((const struct ble_msg_system_endpoint_rx_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 14 ]; then
+                            echo "command: 14"
 #                     #ifdef BGLIB_ENABLE_COMMAND_SYSTEM_ENDPOINT_SET_WATERMARKS
 #                         else if (bgapiRXBuffer[3] == 14) { if (ble_rsp_system_endpoint_set_watermarks) ble_rsp_system_endpoint_set_watermarks((const struct ble_msg_system_endpoint_set_watermarks_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
 #                 }
+                        fi
                 elif [ $bgapiRXBuffer_2 == 1 ]; then
                     echo "class: 1"
 #                     if (false) { }
