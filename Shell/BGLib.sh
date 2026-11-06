@@ -41,17 +41,17 @@
 # 
 # include definitions
 . ../../BGLib.h.sh
-# 
-# BGLib::BGLib(HardwareSerial *module, HardwareSerial *output, uint8_t pMode) {
-#     uModule = module;
-#     uOutput = output;
-#     packetMode = pMode;
-# 
-#     // initialize packet buffers
-#     bgapiRXBuffer = (uint8_t *)malloc(bgapiRXBufferSize = 32);
+#
+# initialize packet buffers
+bgapiRXBufferSize=32
+bgapiRXBufferMax=$(($bgapiRXBufferSize-1))
+for i in $(seq -s" " 0 $bgapiRXBufferMax); do
+    eval bgapiRXBuffer_$i=""
+done
+bgapiRXBufferPos=0
 #     bgapiTXBuffer = (uint8_t *)malloc(bgapiTXBufferSize = 32);
-#     bgapiRXBufferPos = bgapiTXBufferPos = 0;
-# 
+#     bgapiTXBufferPos = 0;
+
 #     onBusy = 0;
 #     onIdle = 0;
 #     onTimeout = 0;
@@ -513,50 +513,39 @@ BGLib_checkActivity() {
 # }
 # 
 BGLib_parse() {
-    ch=$1
-    packetMode=$2
+    local ch=$1
+    local packetMode=$2
 
     echo "BGLib_parse: ch=$ch packetMode=$packetMode"
-#     #ifdef DEBUG
-#         // DEBUG: output hex value of incoming character
-#         if (ch < 16) Serial.write(0x30);    // leading '0'
-#         Serial.print(ch, HEX);              // actual hex value
-#         Serial.write(0x20);                 // trailing ' '
-#     #endif
-# 
 #     if (bgapiRXBufferPos == bgapiRXBufferSize) {
 #         // expand RX buffer to prevent overflow
 #         bgapiRXBuffer = (uint8_t *)realloc(bgapiRXBuffer, bgapiRXBufferSize += 16);
 #     }
-# 
-#     /*
-#     BGAPI packet structure (as of 2012-11-07):
-#         Byte 0:
-#               [7] - 1 bit, Message Type (MT)         0 = Command/Response, 1 = Event
-#             [6:3] - 4 bits, Technology Type (TT)     0000 = Bluetooth 4.0 single mode, 0001 = Wi-Fi
-#             [2:0] - 3 bits, Length High (LH)         Payload length (high bits)
-#         Byte 1:     8 bits, Length Low (LL)          Payload length (low bits)
-#         Byte 2:     8 bits, Class ID (CID)           Command class ID
-#         Byte 3:     8 bits, Command ID (CMD)         Command ID
-#         Bytes 4-n:  0 - 2048 Bytes, Payload (PL)     Up to 2048 bytes of payload
-#     */
-# 
-#     // check packet position
-#     if (bgapiRXBufferPos == 0) {
-#         // beginning of packet, check for correct framing/expected byte(s)
-#         // BGAPI packet for Bluetooth Smart Single Mode must be either Command/Response (0x00) or Event (0x80)
-#         if ((ch & 0x78) == 0x00) {
-#             // store new character in RX buffer
-#             bgapiRXBuffer[bgapiRXBufferPos++] = ch;
-#         } else {
-#             #ifdef DEBUG
-#                 Serial.print("*** Packet frame sync error! Expected .0000... binary, got 0x");
-#                 Serial.println(ch, HEX);
-#             #endif
-#             return 1; // packet format error
-#         }
-#     } else {
-#         // middle of packet, assume we're okay
+
+    # BGAPI packet structure (as of 2012-11-07):
+    #     Byte 0:
+    #           [7] - 1 bit, Message Type (MT)         0 = Command/Response, 1 = Event
+    #         [6:3] - 4 bits, Technology Type (TT)     0000 = Bluetooth 4.0 single mode, 0001 = Wi-Fi
+    #         [2:0] - 3 bits, Length High (LH)         Payload length (high bits)
+    #     Byte 1:     8 bits, Length Low (LL)          Payload length (low bits)
+    #     Byte 2:     8 bits, Class ID (CID)           Command class ID
+    #     Byte 3:     8 bits, Command ID (CMD)         Command ID
+    #     Bytes 4-n:  0 - 2048 Bytes, Payload (PL)     Up to 2048 bytes of payload
+
+    # check packet position
+    echo "bgapiRXBufferPos=$bgapiRXBufferPos"
+    if [ $bgapiRXBufferPos == 0 ]; then
+        # beginning of packet, check for correct framing/expected byte(s)
+        # BGAPI packet for Bluetooth Smart Single Mode must be either Command/Response (0x00) or Event (0x80)
+        if [ $ch == 0 -o $ch == 128 ]; then
+            # store new character in RX buffer
+            eval bgapiRXBuffer_$bgapiRXBufferPos=$ch
+            bgapiRXBufferPos=$(($bgapiRXBufferPos+1))
+        else
+            return 1 # packet format error
+        fi
+    else
+    # middle of packet, assume we're okay
 #         bgapiRXBuffer[bgapiRXBufferPos++] = ch;
 #         if (bgapiRXBufferPos == 2) {
 #             // just received "Length Low" byte, so store expected packet length
@@ -1044,9 +1033,9 @@ $BGLib_ble_rsp_system_info
 #                 }
 #             }
 #         }
-#     }
+    fi
 # 
-#     return 0; // parsed successfully
+    return 0 # parsed successfully
 }
  
 BGLib_sendCommand() {
