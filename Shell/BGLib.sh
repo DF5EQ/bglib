@@ -567,7 +567,6 @@ BGLib_parse() {
                 lastResponse_0=$bgapiRXBuffer_2
                 lastResponse_1=$bgapiRXBuffer_3
                 echo $lastResponse_0 $lastResponse_1
-
                 if [ $bgapiRXBuffer_2 == 0 ]; then
                     echo "class: 0"
 #                     if (false) { }
@@ -655,34 +654,55 @@ BGLib_parse() {
                 elif [ $bgapiRXBuffer_2 == 1 ]; then
                     echo "class: 1"
 #                     if (false) { }
+                        if false; then
+                            :
+                        elif [ $bgapiRXBuffer_3 == 0 ]; then
+                            echo "command: 0"
 #                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_DEFRAG
 #                         else if (bgapiRXBuffer[3] == 0) { if (ble_rsp_flash_ps_defrag) ble_rsp_flash_ps_defrag((const struct ble_msg_flash_ps_defrag_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 1 ]; then
+                            echo "command: 1"
 #                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_DUMP
 #                         else if (bgapiRXBuffer[3] == 1) { if (ble_rsp_flash_ps_dump) ble_rsp_flash_ps_dump((const struct ble_msg_flash_ps_dump_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 2 ]; then
+                            echo "command: 2"
 #                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_ERASE_ALL
 #                         else if (bgapiRXBuffer[3] == 2) { if (ble_rsp_flash_ps_erase_all) ble_rsp_flash_ps_erase_all((const struct ble_msg_flash_ps_erase_all_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 3 ]; then
+                            echo "command: 3"
 #                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_SAVE
 #                         else if (bgapiRXBuffer[3] == 3) { if (ble_rsp_flash_ps_save) ble_rsp_flash_ps_save((const struct ble_msg_flash_ps_save_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 4 ]; then
+                            echo "command: 4"
 #                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_LOAD
 #                         else if (bgapiRXBuffer[3] == 4) { if (ble_rsp_flash_ps_load) ble_rsp_flash_ps_load((const struct ble_msg_flash_ps_load_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 5 ]; then
+                            echo "command: 5"
 #                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_PS_ERASE
 #                         else if (bgapiRXBuffer[3] == 5) { if (ble_rsp_flash_ps_erase) ble_rsp_flash_ps_erase((const struct ble_msg_flash_ps_erase_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 6 ]; then
+                            echo "command: 6"
 #                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_ERASE_PAGE
 #                         else if (bgapiRXBuffer[3] == 6) { if (ble_rsp_flash_erase_page) ble_rsp_flash_erase_page((const struct ble_msg_flash_erase_page_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 7 ]; then
+                            echo "command: 7"
 #                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_WRITE_DATA
 #                         else if (bgapiRXBuffer[3] == 7) { if (ble_rsp_flash_write_data) ble_rsp_flash_write_data((const struct ble_msg_flash_write_data_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 8 ]; then
+                            echo "command: 8"
 #                     #ifdef BGLIB_ENABLE_COMMAND_FLASH_READ_DATA
 #                         else if (bgapiRXBuffer[3] == 8) { if (ble_rsp_flash_read_data) ble_rsp_flash_read_data((const struct ble_msg_flash_read_data_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
 #                 }
+                        fi
                 elif [ $bgapiRXBuffer_2 == 2 ]; then
                     echo "class: 2"
 #                     if (false) { }
