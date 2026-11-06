@@ -567,6 +567,7 @@ BGLib_parse() {
                 lastResponse_0=$bgapiRXBuffer_2
                 lastResponse_1=$bgapiRXBuffer_3
                 echo $lastResponse_0 $lastResponse_1
+
                 if [ $bgapiRXBuffer_2 == 0 ]; then
                     echo "class: 0"
 #                     if (false) { }
@@ -706,22 +707,35 @@ BGLib_parse() {
                 elif [ $bgapiRXBuffer_2 == 2 ]; then
                     echo "class: 2"
 #                     if (false) { }
+                        if false; then
+                            :
+                        elif [ $bgapiRXBuffer_3 == 0 ]; then
+                            echo "command: 0"
 #                     #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_WRITE
 #                         else if (bgapiRXBuffer[3] == 0) { if (ble_rsp_attributes_write) ble_rsp_attributes_write((const struct ble_msg_attributes_write_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 1 ]; then
+                            echo "command: 1"
 #                     #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_READ
 #                         else if (bgapiRXBuffer[3] == 1) { if (ble_rsp_attributes_read) ble_rsp_attributes_read((const struct ble_msg_attributes_read_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 2 ]; then
+                            echo "command: 2"
 #                     #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_READ_TYPE
 #                         else if (bgapiRXBuffer[3] == 2) { if (ble_rsp_attributes_read_type) ble_rsp_attributes_read_type((const struct ble_msg_attributes_read_type_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 3 ]; then
+                            echo "command: 3"
 #                     #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_USER_READ_RESPONSE
 #                         else if (bgapiRXBuffer[3] == 3) { if (ble_rsp_attributes_user_read_response) ble_rsp_attributes_user_read_response((const struct ble_msg_attributes_user_read_response_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
+                        elif [ $bgapiRXBuffer_3 == 4 ]; then
+                            echo "command: 4"
 #                     #ifdef BGLIB_ENABLE_COMMAND_ATTRIBUTES_USER_WRITE_RESPONSE
 #                         else if (bgapiRXBuffer[3] == 4) { if (ble_rsp_attributes_user_write_response) ble_rsp_attributes_user_write_response((const struct ble_msg_attributes_user_write_response_rsp_t *)(bgapiRXBuffer + 4)); }
 #                     #endif
 #                 }
+                        fi
                 elif [ $bgapiRXBuffer_2 == 3 ]; then
                     echo "class: 3"
 #                     if (false) { }
